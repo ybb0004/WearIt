@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">WearIt</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    //Inicio App
+    <string name="donde_tu_outfit_inspira_tendencias">Donde tu Outfit inspira tendencias</string>
+    <string name="registrate">Regístrate</string>
+    <string name="iniciar_sesion">Iniciar sesión</string>
 </resources>
