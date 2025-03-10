@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/fondo_pantalla"
+    android:background="@drawable/Fondo_Pantalla"
     tools:context=".W01_0000_Activity_Inicio_App">
 
     <androidx.fragment.app.FragmentContainerView
@@ -17,5 +17,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:navGraph="@navigation/nav_graph" />
+        app:navGraph="@navigation/nav_graph_inicio" />
 </androidx.constraintlayout.widget.ConstraintLayout>

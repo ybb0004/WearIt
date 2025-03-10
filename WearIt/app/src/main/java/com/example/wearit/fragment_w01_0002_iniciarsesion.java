@@ -10,10 +10,10 @@ import android.view.ViewGroup;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link w01_0001_inicio_registro#newInstance} factory method to
+ * Use the {@link fragment_w01_0002_iniciarsesion#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class w01_0001_inicio_registro extends Fragment {
+public class fragment_w01_0002_iniciarsesion extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -24,7 +24,7 @@ public class w01_0001_inicio_registro extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public w01_0001_inicio_registro() {
+    public fragment_w01_0002_iniciarsesion() {
         // Required empty public constructor
     }
 
@@ -34,11 +34,11 @@ public class w01_0001_inicio_registro extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment w01_0001_inicio_registro.
+     * @return A new instance of fragment fragment_w01_0002_iniciarsesion.
      */
     // TODO: Rename and change types and number of parameters
-    public static w01_0001_inicio_registro newInstance(String param1, String param2) {
-        w01_0001_inicio_registro fragment = new w01_0001_inicio_registro();
+    public static fragment_w01_0002_iniciarsesion newInstance(String param1, String param2) {
+        fragment_w01_0002_iniciarsesion fragment = new fragment_w01_0002_iniciarsesion();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -59,6 +59,6 @@ public class w01_0001_inicio_registro extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_w01_0001_inicio_registro, container, false);
+        return inflater.inflate(R.layout.fragment_w01_0002_iniciarsesion, container, false);
     }
 }

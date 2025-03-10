@@ -47,4 +47,8 @@
     <color name="color_acento">#FF4081</color>
     <color name="color_acento_variante">#F50057</color>
     <color name="color_acento_claro">#FFAB40</color> <!-- Nuevo color de acento claro -->
+
+    <!--Colores de Pagina Iniciar Sesion-->
+    <color name="color_google">#DB4437</color> <!-- Color de Google -->
+    <color name="color_facebook">#4267B2</color> <!-- Color de Facebook -->
 </resources>

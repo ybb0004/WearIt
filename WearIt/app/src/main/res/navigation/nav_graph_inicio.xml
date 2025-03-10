@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph_inicio.xml"
 
-    />
+    app:startDestination="@id/fragment_w01_0001_inicio_registro">
+    <fragment
+        android:id="@+id/fragment_w01_0002_iniciarsesion"
+        android:name="com.example.wearit.fragment_w01_0002_iniciarsesion"
+        android:label="fragment_w01_0002_iniciarsesion"
+        tools:layout="@layout/fragment_w01_0002_iniciarsesion" />
+    <fragment
+        android:id="@+id/fragment_w01_0001_inicio_registro"
+        android:name="com.example.wearit.fragment_w01_0001_inicio_registro"
+        android:label="fragment_w01_0001_inicio_registro" />
+</navigation>
