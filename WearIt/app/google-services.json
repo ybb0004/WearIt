@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "819462041842",
+    "project_id": "wearit-db0a8",
+    "storage_bucket": "wearit-db0a8.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:819462041842:android:a13c662d4bf19e10df206b",
+        "android_client_info": {
+          "package_name": "com.example.wearit"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAXNnwc6ljZdTGv4qjlatVzFy5H561LIG4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
