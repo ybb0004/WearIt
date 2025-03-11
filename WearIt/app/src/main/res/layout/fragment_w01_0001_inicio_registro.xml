@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/color_fondo">
+    android:background="@color/color_fondo"
+    tools:context=".fragment_w01_0001_inicio_registro">
 
     <ImageView
         android:id="@+id/imageViewLogo"
