@@ -13,13 +13,13 @@
         android:theme="@style/Theme.WearIt"
         tools:targetApi="31">
         <activity
-            android:name=".activity_w020000_home_app"
+            android:name=".W01_0000_Activity_Inicio_App"
             android:exported="false" />
         <activity
             android:name=".MainActivity"
             android:exported="false" />
         <activity
-            android:name=".W01_0000_Activity_Inicio_App"
+            android:name=".activity_w020000_home_app"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
