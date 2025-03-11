@@ -2,4 +2,53 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <color name="transparent">#00000000</color> <!-- Color transparente -->
+
+    <!-- Colores Primarios -->
+    <color name="color_naranja_oscuro">#C36406</color>
+    <color name="color_amarillo">#F1A421</color>
+    <color name="color_beige_claro">#EFBE89</color>
+    <color name="color_azul_claro">#4A90E2</color> <!-- Nuevo color -->
+    <color name="color_rojo_oscuro">#C62828</color> <!-- Nuevo color -->
+
+    <!-- Colores Secundarios -->
+    <color name="color_verde_claro">#72AF87</color>
+    <color name="color_verde_oscuro">#354D4B</color>
+    <color name="color_morado">#8E24AA</color> <!-- Nuevo color -->
+
+    <!-- Colores de Error -->
+    <color name="color_error">#B00020</color>
+
+    <!-- Colores de Fondo -->
+    <color name="color_fondo">#FFFFFF</color>
+    <color name="color_superficie">#F5F5F5</color> <!-- Color de superficie más suave -->
+
+    <!-- Colores de Texto -->
+    <color name="texto_sobre_primario">#FFFFFF</color>
+    <color name="texto_sobre_secundario">#000000</color>
+    <color name="texto_sobre_error">#FFFFFF</color>
+    <color name="texto_sobre_fondo">#212121</color> <!-- Texto más oscuro sobre fondo blanco -->
+    <color name="texto_sobre_superficie">#424242</color> <!-- Texto más oscuro sobre superficie clara -->
+
+    <!-- Colores de Escala de Grises -->
+    <color name="gris_50">#FAFAFA</color>
+    <color name="gris_100">#F5F5F5</color>
+    <color name="gris_200">#EEEEEE</color>
+    <color name="gris_300">#E0E0E0</color>
+    <color name="gris_400">#BDBDBD</color>
+    <color name="gris_500">#9E9E9E</color>
+    <color name="gris_600">#757575</color>
+    <color name="gris_700">#616161</color>
+    <color name="gris_800">#424242</color>
+    <color name="gris_900">#212121</color>
+
+    <!-- Colores de Acento -->
+    <color name="color_acento">#FF4081</color>
+    <color name="color_acento_variante">#F50057</color>
+    <color name="color_acento_claro">#FFAB40</color> <!-- Nuevo color de acento claro -->
+
+    <!--Colores de Pagina Iniciar Sesion-->
+    <color name="color_google">#DB4437</color> <!-- Color de Google -->
+    <color name="color_facebook">#4267B2</color> <!-- Color de Facebook -->
 </resources>

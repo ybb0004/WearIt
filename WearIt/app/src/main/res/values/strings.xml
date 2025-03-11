@@ -1,3 +1,18 @@
 <resources>
     <string name="app_name">WearIt</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    //Inicio App
+    <string name="donde_tu_outfit_inspira_tendencias">Donde tu Outfit inspira tendencias</string>
+    <string name="registrate">Regístrate</string>
+    <string name="iniciar_sesion">Iniciar sesión</string>
+    <string name="atras">Ir atrás</string>
+    <string name="Iniciar_sesion">Iniciar Sesion</string>
+    <string name="hint_usuario_email">Usuario o Correo Electronico</string>
+    <string name="hint_contrasena">Contraseña</string>
+    <string name="toggle_ver_contraseña">Ver contraseña</string>
+    <string name="o">o</string>
+    <string name="iniciar_sesion_google">Iniciar sesión con Google</string>
+    <string name="iniciar_sesion_facebook">Iniciar sesión con Facebook</string>
 </resources>
