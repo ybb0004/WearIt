@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph_inicio.xml"
 
-    app:startDestination="@id/fragment_w01_0001_inicio_registro">
+    app:startDestination="@id/fragment_w200000_inicio_app">
     <fragment
         android:id="@+id/fragment_w01_0002_iniciarsesion"
         android:name="com.example.wearit.fragment_w01_0002_iniciarsesion"
@@ -14,4 +14,9 @@
         android:id="@+id/fragment_w01_0001_inicio_registro"
         android:name="com.example.wearit.fragment_w01_0001_inicio_registro"
         android:label="fragment_w01_0001_inicio_registro" />
+    <fragment
+        android:id="@+id/fragment_w200000_inicio_app"
+        android:name="com.example.wearit.fragment_w200000_inicio_app"
+        android:label="fragment_w200000_inicio_app"
+        tools:layout="@layout/fragment_w200000_inicio_app" />
 </navigation>
