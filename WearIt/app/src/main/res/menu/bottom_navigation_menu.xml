@@ -11,9 +11,11 @@
         android:title=""/>
     <item
         android:id="@+id/item_3"
+        android:checkable="false"
         android:enabled="true"
         android:icon="@drawable/screenshot_frame_2_24px"
-        android:title=""/>
+        android:iconTint="#E13131"
+        android:title="" />
     <item
         android:id="@+id/item_4"
         android:enabled="true"
