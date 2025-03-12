@@ -15,4 +15,10 @@
     <string name="o">o</string>
     <string name="iniciar_sesion_google">Iniciar sesión con Google</string>
     <string name="iniciar_sesion_facebook">Iniciar sesión con Facebook</string>
+    <string name="nombre">Nombre</string>
+    <string name="IntroduzcionDeDatos">Introduce los siguientes datos:</string>
+    <string name="usuario">Usuario</string>
+    <string name="leyPrivacidad">Acepta nuestra ley de privacidad</string>
+    <string name="Continuar">Continuar</string>
+
 </resources>
