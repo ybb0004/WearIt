@@ -7,58 +7,53 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
+import androidx.fragment.app.Fragment;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link fragment_w02_0001_home#newInstance} factory method to
  * create an instance of this fragment.
  */
 public class fragment_w02_0001_home extends Fragment {
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public fragment_w02_0001_home() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment fragment_w02_0001_home.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static fragment_w02_0001_home newInstance(String param1, String param2) {
-        fragment_w02_0001_home fragment = new fragment_w02_0001_home();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        // Inflamos el layout (ajusta el nombre del layout según tu archivo)
+        View view = inflater.inflate(R.layout.fragment_w02_0001_home, container, false);
+
+        // Inicializamos las vistas del LinearLayout
+        ImageView dayNightIcon = view.findViewById(R.id.dayNightIcon);
+        TextView timeText = view.findViewById(R.id.timeText);
+        ImageView weatherIcon = view.findViewById(R.id.weatherIcon);
+        TextView temperatureText = view.findViewById(R.id.temperatureText);
+
+        // Configurar Día/Noche y Hora
+        Calendar calendar = Calendar.getInstance();
+        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
+        String currentTime = timeFormat.format(calendar.getTime());
+
+        if (hour >= 6 && hour < 18) {
+            // Día
+            dayNightIcon.setImageResource(R.drawable.wb_sunny_24px);
+        } else {
+            // Noche
+            dayNightIcon.setImageResource(R.drawable.dark_mode_24px);
         }
-    }
+        timeText.setText(currentTime);
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_w02_0001_home, container, false);
+        // Configurar Clima y Temperatura (simulación)
+        // Nota: Para datos reales, necesitarías una API de clima como OpenWeatherMap
+        weatherIcon.setImageResource(R.drawable.cloud_24px); // Ejemplo estático
+        temperatureText.setText("25°C"); // Ejemplo estático
+
+        return view;
     }
 }

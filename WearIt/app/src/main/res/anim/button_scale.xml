@@ -17,4 +17,5 @@
         android:startOffset="100"
         android:pivotX="50%"
         android:pivotY="50%" />
+
 </set>

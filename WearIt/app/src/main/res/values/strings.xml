@@ -7,11 +7,11 @@
     <string name="donde_tu_outfit_inspira_tendencias">Donde tu Outfit inspira tendencias</string>
     <string name="registrate">Regístrate</string>
     <string name="iniciar_sesion">Iniciar sesión</string>
-    <string name="atras">Ir atrás</string>
+
     <string name="Iniciar_sesion">Iniciar Sesion</string>
     <string name="hint_usuario_email">Usuario o Correo Electronico</string>
     <string name="hint_contrasena">Contraseña</string>
-    <string name="toggle_ver_contraseña">Ver contraseña</string>
+    <string name="toggle_ver_contraseña">Mostrar/Ocultar Contraseña</string>
     <string name="o">o</string>
     <string name="iniciar_sesion_google">Iniciar sesión con Google</string>
     <string name="iniciar_sesion_facebook">Iniciar sesión con Facebook</string>
@@ -20,5 +20,19 @@
     <string name="usuario">Usuario</string>
     <string name="leyPrivacidad">Acepta nuestra ley de privacidad</string>
     <string name="Continuar">Continuar</string>
+    <string name="day_night_icon_desc">Indicador de día o noche</string>
+    <string name="weather_icon_desc">Indicador del clima</string>
 
+    <string name="atras">Atrás</string>
+    <string name="configuracion">Configuración</string>
+    <string name="prendas">Prendas</string>
+    <string name="colecciones">Colecciones</string>
+    <string name="guardados">Guardados</string>
+    <string name="me_gusta">Me gusta</string>
+    <string name="avatar_desc">Foto de perfil del usuario</string>
+    <string name="outfit_desc">Imagen de prenda o conjunto</string>
+    <string name="usuario_ejemplo">Usuario Ejemplo</string>
+    <string name="amante_moda">Amante de la moda</string>
+    <string name="followers">Followers</string>
+    <string name="outfits">Outfits</string>
 </resources>

@@ -6,10 +6,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/transparent"
-    android:backgroundTint="@color/transparent"
     tools:context=".fragment_w01_0003_registro">
 
-    <!-- Back Button (Fixed, Animated) -->
+    <!-- Botón Atrás (Fijo) -->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/iconButton"
         style="@style/Widget.Material3.Button.Icon"
@@ -21,29 +20,27 @@
         android:contentDescription="@string/atras"
         app:cornerRadius="50dp"
         app:elevation="6dp"
-        app:icon="@drawable/arrow_back_24px"
+        app:icon="@drawable/ic_arrow_back_24px"
         app:iconTint="@color/white"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- Scrollable Content -->
+    <!-- Contenido Desplazable -->
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="552dp"
+        android:layout_height="0dp"
         android:fillViewport="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/iconButton"
-        app:layout_constraintVertical_bias="0.0">
+        app:layout_constraintTop_toBottomOf="@id/iconButton">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="16dp">
+            android:paddingBottom="32dp">
 
-            <!-- App Title with Shadow -->
+            <!-- Título de la App -->
             <TextView
                 android:id="@+id/textViewRegistro"
                 android:layout_width="wrap_content"
@@ -60,7 +57,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <!-- Form Subtitle -->
+            <!-- Subtítulo del Formulario -->
             <TextView
                 android:id="@+id/labelUsuarioRegistro"
                 android:layout_width="wrap_content"
@@ -73,13 +70,13 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/textViewRegistro" />
 
-            <!-- Form Fields Container -->
+            <!-- Contenedor de Campos -->
             <LinearLayout
                 android:id="@+id/formContainer"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp"
-                android:layout_marginTop="32dp"
+                android:layout_marginHorizontal="32dp"
+                android:layout_marginTop="24dp"
                 android:background="@drawable/rounded_white_background"
                 android:orientation="vertical"
                 android:padding="16dp"
@@ -87,7 +84,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/labelUsuarioRegistro">
 
-                <!-- Name Field -->
+                <!-- Campo Nombre -->
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/textInputLayoutUsuarioRegistro"
                     style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
@@ -107,7 +104,7 @@
                         android:layout_height="wrap_content" />
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <!-- Username Field -->
+                <!-- Campo Usuario -->
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/textInputLayoutNombreRegistro"
                     style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
@@ -119,7 +116,7 @@
                     app:endIconDrawable="@drawable/cancel_24px"
                     app:endIconMode="clear_text"
                     app:hintTextColor="@color/color_naranja_oscuro"
-                    app:startIconDrawable="@drawable/face_24px">
+                    app:startIconDrawable="@drawable/ic_face_24px">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/editTextNombreRegistro"
@@ -127,7 +124,7 @@
                         android:layout_height="wrap_content" />
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <!-- Email Field -->
+                <!-- Campo Email -->
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/textInputMailRegistro"
                     style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
@@ -148,7 +145,7 @@
                         android:inputType="textEmailAddress" />
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <!-- Password Field -->
+                <!-- Campo Contraseña -->
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/textInputLayoutContrasenaRegistro"
                     style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
@@ -169,7 +166,7 @@
                         android:inputType="textPassword" />
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <!-- Confirm Password Field -->
+                <!-- Campo Confirmar Contraseña -->
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/textInputLayoutContrasena2Registro"
                     style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
@@ -190,7 +187,7 @@
                         android:inputType="textPassword" />
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <!-- Custom Checkbox -->
+                <!-- Checkbox con enlace clickable -->
                 <CheckBox
                     android:id="@+id/checkboxPrivacidadRegistro"
                     android:layout_width="wrap_content"
@@ -202,25 +199,27 @@
                     android:textSize="14sp" />
             </LinearLayout>
 
-            <!-- Continue Button with Animation -->
+            <!-- Botón Continuar -->
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/button2Registro"
                 style="@style/Widget.Material3.Button.ElevatedButton"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp"
+                android:layout_height="56dp"
+                android:layout_marginHorizontal="32dp"
                 android:layout_marginTop="24dp"
-                android:layout_marginBottom="16dp"
+                android:layout_marginBottom="32dp"
                 android:backgroundTint="@color/color_naranja_oscuro"
                 android:text="@string/Continuar"
                 android:textColor="@color/white"
-                app:cornerRadius="12dp"
-                app:elevation="6dp"
+                android:textSize="16sp"
+                app:cornerRadius="16dp"
+                app:elevation="8dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/formContainer" />
+                app:layout_constraintTop_toBottomOf="@id/formContainer"
+                app:rippleColor="#80FFFFFF" />
 
-            <!-- Progress Indicator -->
+            <!-- Indicador de Progreso -->
             <ProgressBar
                 android:id="@+id/progressBar"
                 android:layout_width="wrap_content"
@@ -232,5 +231,4 @@
                 app:layout_constraintTop_toTopOf="@id/button2Registro" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
-
 </androidx.constraintlayout.widget.ConstraintLayout>

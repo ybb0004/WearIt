@@ -2,7 +2,7 @@
     <item
         android:id="@+id/item_1"
         android:enabled="true"
-        android:icon="@drawable/home_24px"
+        android:icon="@drawable/ic_home_24px"
         android:title=""/>
     <item
         android:id="@+id/item_2"
@@ -19,7 +19,7 @@
     <item
         android:id="@+id/item_4"
         android:enabled="true"
-        android:icon="@drawable/calendar_month_24px"
+        android:icon="@drawable/ic_calendar_month_24px"
         android:title=""/>
     <item
         android:id="@+id/item_5"
