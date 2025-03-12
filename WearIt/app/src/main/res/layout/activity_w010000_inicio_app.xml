@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/Fondo_Pantalla"
+    android:background="@drawable/fondo_pantalla"
     tools:context=".W01_0000_Activity_Inicio_App">
 
     <androidx.fragment.app.FragmentContainerView
