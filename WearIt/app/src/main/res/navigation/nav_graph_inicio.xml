@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph_inicio.xml"
 
-    app:startDestination="@id/fragment_w01_0001_inicio_registro">
+    app:startDestination="@id/fragment_w02_0005_perfil2">
     <fragment
         android:id="@+id/fragment_w01_0002_iniciarsesion"
         android:name="com.example.wearit.fragment_w01_0002_iniciarsesion"
@@ -19,4 +19,9 @@
             android:id="@+id/action_fragment_w01_0001_inicio_registro_to_fragment_w01_0002_iniciarsesion"
             app:destination="@id/fragment_w01_0002_iniciarsesion" />
     </fragment>
+    <fragment
+        android:id="@+id/fragment_w02_0005_perfil2"
+        android:name="com.example.wearit.fragment_w02_0005_perfil"
+        android:label="fragment_w02_0005_perfil"
+        tools:layout="@layout/fragment_w02_0005_perfil" />
 </navigation>

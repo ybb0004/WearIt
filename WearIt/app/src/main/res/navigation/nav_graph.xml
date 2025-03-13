@@ -3,10 +3,20 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/fragment_w02_0001_home">
+    app:startDestination="@id/fragment_w02_0005_perfil">
     <fragment
         android:id="@+id/fragment_w02_0001_home"
         android:name="com.example.wearit.fragment_w02_0001_home"
         android:label="fragment_w02_0001_home"
         tools:layout="@layout/fragment_w02_0001_home" />
+    <fragment
+        android:id="@+id/fragment_w02_0003_registrar_ropa"
+        android:name="com.example.wearit.fragment_w02_0003_registrar_ropa"
+        android:label="fragment_w02_0003_registrar_ropa"
+        tools:layout="@layout/fragment_w02_0003_registrar_ropa" />
+    <fragment
+        android:id="@+id/fragment_w02_0005_perfil"
+        android:name="com.example.wearit.fragment_w02_0005_perfil"
+        android:label="fragment_w02_0005_perfil"
+        tools:layout="@layout/fragment_w02_0005_perfil" />
 </navigation>
