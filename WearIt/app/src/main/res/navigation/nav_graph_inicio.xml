@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph_inicio.xml"
 
-    app:startDestination="@id/fragment_w200000_inicio_app">
+    app:startDestination="@id/abrirCamara">
     <fragment
         android:id="@+id/fragment_w01_0002_iniciarsesion"
         android:name="com.example.wearit.fragment_w01_0002_iniciarsesion"
@@ -19,4 +19,9 @@
         android:name="com.example.wearit.fragment_w200000_inicio_app"
         android:label="fragment_w200000_inicio_app"
         tools:layout="@layout/fragment_w200000_inicio_app" />
+    <fragment
+        android:id="@+id/abrirCamara"
+        android:name="com.example.wearit.AbrirCamara"
+        android:label="fragment_abrir_camara"
+        tools:layout="@layout/fragment_abrir_camara" />
 </navigation>
