@@ -47,6 +47,9 @@ public class fragment_w01_0001_inicio_registro extends Fragment {
             public void onClick(View v) {
                 v.startAnimation(buttonScale);
                 // Navegar al fragmento de registro
+                // Obtener el NavController
+
+
 
             }});
 
@@ -59,6 +62,7 @@ public class fragment_w01_0001_inicio_registro extends Fragment {
                 // Ejemplo: getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new LoginFragment()).addToBackStack(null).commit();
                 NavController navController = Navigation.findNavController(v);
                 navController.navigate(R.id.action_fragment_w01_0001_inicio_registro_to_fragment_w01_0002_iniciarsesion);
+
 
             }
         });

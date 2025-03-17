@@ -64,6 +64,8 @@ public class fragment_w01_0002_iniciarsesion extends Fragment {
             public void onClick(View v) {
                 v.startAnimation(buttonScale);
                 // Aquí va la lógica de inicio de sesión con email/contraseña
+
+
                 // Obtener referencias a los campos de texto
                 EditText editTextEmail = getView().findViewById(R.id.textInputEditTextUser); // Cambia al ID de tu campo de correo
                 EditText editTextPassword = getView().findViewById(R.id.textInputEditTextPassword); // Cambia al ID de tu campo de contraseña
@@ -90,7 +92,7 @@ public class fragment_w01_0002_iniciarsesion extends Fragment {
 
                                     // Ejemplo: Navegar a otro fragmento
                                     NavController navController = Navigation.findNavController(v);
-                                    navController.navigate(R.id.action_fragment_w01_0002_iniciarsesion_to_fragment_w02_0005_perfil22);
+                                    navController.navigate(R.id.action_fragment_w01_0002_iniciarsesion_to_fragment_w02_0001_home2);
                                 }
                             } else {
                                 // Error en el inicio de sesión
