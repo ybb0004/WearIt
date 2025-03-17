@@ -7,10 +7,12 @@
 
     <!-- Colores Primarios -->
     <color name="color_naranja_oscuro">#C36406</color>
+    <color name="color_naranja_claro">#FF9800</color>
     <color name="color_amarillo">#F1A421</color>
     <color name="color_beige_claro">#EFBE89</color>
     <color name="color_azul_claro">#4A90E2</color> <!-- Nuevo color -->
     <color name="color_rojo_oscuro">#C62828</color> <!-- Nuevo color -->
+    <color name="marron">#80FF5722</color>
 
     <!-- Colores Secundarios -->
     <color name="color_verde_claro">#72AF87</color>
