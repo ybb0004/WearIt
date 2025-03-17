@@ -7,23 +7,7 @@ import androidx.navigation.Navigation;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-<<<<<<< Updated upstream
 import android.widget.Button;
-=======
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import androidx.fragment.app.Fragment;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-
-import com.google.android.material.button.MaterialButton;
-import android.widget.ImageView;
-
->>>>>>> Stashed changes
 
 public class fragment_w01_0001_inicio_registro extends Fragment {
 
@@ -68,29 +52,9 @@ public class fragment_w01_0001_inicio_registro extends Fragment {
         btnNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-<<<<<<< Updated upstream
                 // Obtener el NavController
                 NavController navController = Navigation.findNavController(v);
 
-=======
-                v.startAnimation(buttonScale);
-                // Navegar al fragmento de registro
-                // Obtener el NavController
-
-
-
-            }});
-
-        // Botón Iniciar Sesión
-        btnLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                v.startAnimation(buttonScale);
-                // Navegar al fragmento de inicio de sesión (ajusta según tu estructura)
-                // Ejemplo: getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new LoginFragment()).addToBackStack(null).commit();
-                NavController navController = Navigation.findNavController(v);
-
->>>>>>> Stashed changes
                 // Navegar al siguiente fragmento usando la acción definida en el nav_graph.xml
                 navController.navigate(R.id.action_fragment_w01_0001_inicio_registro_to_fragment_w01_0002_iniciarsesion);
             }

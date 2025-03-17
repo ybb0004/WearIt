@@ -33,7 +33,6 @@ android {
 dependencies {
     // Firebase BoM (Bill of Materials) para gestionar versiones
     implementation(platform("com.google.firebase:firebase-bom:33.10.0"))
-<<<<<<< Updated upstream
 
     // Dependencias de Firebase
     implementation("com.google.firebase:firebase-analytics")         // Firebase Analytics
@@ -49,16 +48,6 @@ dependencies {
     implementation("com.google.code.gson:gson:2.8.9")               // Gson
 
     // Dependencias de AndroidX
-=======
-    implementation("com.google.firebase:firebase-auth") // Autenticación de Firebase
-
-
-    implementation("com.google.firebase:firebase-analytics")
-    //
-    implementation ("androidx.transition:transition:1.5.0")
-    implementation ("androidx.core:core:1.12.0")
-    implementation ("androidx.recyclerview:recyclerview:1.3.2")
->>>>>>> Stashed changes
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.android.material:material:1.8.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
