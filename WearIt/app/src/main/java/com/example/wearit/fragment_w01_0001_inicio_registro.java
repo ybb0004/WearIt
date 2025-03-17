@@ -14,6 +14,9 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+
 import com.google.android.material.button.MaterialButton;
 import android.widget.ImageView;
 
@@ -54,6 +57,9 @@ public class fragment_w01_0001_inicio_registro extends Fragment {
                 v.startAnimation(buttonScale);
                 // Navegar al fragmento de inicio de sesión (ajusta según tu estructura)
                 // Ejemplo: getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new LoginFragment()).addToBackStack(null).commit();
+                NavController navController = Navigation.findNavController(v);
+                navController.navigate(R.id.action_fragment_w01_0001_inicio_registro_to_fragment_w01_0002_iniciarsesion);
+
             }
         });
 

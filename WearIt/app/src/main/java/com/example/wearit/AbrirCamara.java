@@ -79,7 +79,7 @@ public class AbrirCamara extends Fragment {
 
                 // Navegar a otro fragmento usando NavController
                 NavController navController = Navigation.findNavController(v);
-                navController.navigate(R.id.action_abrirCamara_to_fragment_w200000_inicio_app); // Asegúrate de que "ac" sea una acción válida en tu nav_graph.xml
+                navController.navigate(R.id.action_fragment_w01_0001_inicio_registro_to_fragment_w01_0002_iniciarsesion); // Asegúrate de que "ac" sea una acción válida en tu nav_graph.xml
             }
         });
 

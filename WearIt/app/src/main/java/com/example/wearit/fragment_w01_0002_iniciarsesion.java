@@ -14,9 +14,18 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+
 import com.google.android.material.button.MaterialButton;
+
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
+
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 
 public class fragment_w01_0002_iniciarsesion extends Fragment {
@@ -55,6 +64,39 @@ public class fragment_w01_0002_iniciarsesion extends Fragment {
             public void onClick(View v) {
                 v.startAnimation(buttonScale);
                 // Aquí va la lógica de inicio de sesión con email/contraseña
+                // Obtener referencias a los campos de texto
+                EditText editTextEmail = getView().findViewById(R.id.textInputEditTextUser); // Cambia al ID de tu campo de correo
+                EditText editTextPassword = getView().findViewById(R.id.textInputEditTextPassword); // Cambia al ID de tu campo de contraseña
+
+                // Obtener el correo y la contraseña
+                String email = editTextEmail.getText().toString().trim();
+                String password = editTextPassword.getText().toString().trim();
+
+                // Validar que los campos no estén vacíos
+                if (email.isEmpty() || password.isEmpty()) {
+                    Toast.makeText(getContext(), "Por favor, completa todos los campos", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                // Iniciar sesión con Firebase Authentication
+                FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password)
+                        .addOnCompleteListener(getActivity(), task -> {
+                            if (task.isSuccessful()) {
+                                // Inicio de sesión exitoso
+                                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                                if (user != null) {
+                                    // Navegar a la siguiente pantalla o realizar acciones adicionales
+                                    Toast.makeText(getContext(), "Inicio de sesión exitoso", Toast.LENGTH_SHORT).show();
+
+                                    // Ejemplo: Navegar a otro fragmento
+                                    NavController navController = Navigation.findNavController(v);
+                                    navController.navigate(R.id.action_fragment_w01_0002_iniciarsesion_to_fragment_w02_0005_perfil22);
+                                }
+                            } else {
+                                // Error en el inicio de sesión
+                                Toast.makeText(getContext(), "Error: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                        });
             }
         });
 
