@@ -1,26 +1,19 @@
 package com.example.wearit;
 
 import android.os.Bundle;
-
 import androidx.fragment.app.Fragment;
-
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link fragment_w01_0001_inicio_registro#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class fragment_w01_0001_inicio_registro extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
@@ -28,15 +21,6 @@ public class fragment_w01_0001_inicio_registro extends Fragment {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment w01_0001_inicio_registro.
-     */
-    // TODO: Rename and change types and number of parameters
     public static fragment_w01_0001_inicio_registro newInstance(String param1, String param2) {
         fragment_w01_0001_inicio_registro fragment = new fragment_w01_0001_inicio_registro();
         Bundle args = new Bundle();
@@ -58,7 +42,24 @@ public class fragment_w01_0001_inicio_registro extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_w01_0001_inicio_registro, container, false);
+        // Inflar el layout del fragmento
+        View view = inflater.inflate(R.layout.fragment_w01_0001_inicio_registro, container, false);
+
+        // Obtener referencia al botón
+        Button btnNext = view.findViewById(R.id.btnLogin); // Asegúrate de tener un botón en tu XML con este ID
+
+        // Configurar el evento OnClickListener
+        btnNext.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Obtener el NavController
+                NavController navController = Navigation.findNavController(v);
+
+                // Navegar al siguiente fragmento usando la acción definida en el nav_graph.xml
+                navController.navigate(R.id.action_fragment_w01_0001_inicio_registro_to_fragment_w01_0002_iniciarsesion);
+            }
+        });
+
+        return view;
     }
 }

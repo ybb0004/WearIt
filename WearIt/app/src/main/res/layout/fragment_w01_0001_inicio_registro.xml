@@ -21,13 +21,11 @@
         android:id="@+id/imageViewLema"
         android:layout_width="350dp"
         android:layout_height="90dp"
-        android:layout_marginBottom="8dp"
         android:src="@drawable/lemainicio"
-        app:layout_constraintBottom_toTopOf="@+id/btnRegister"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.475"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageViewLogo"
-        app:layout_constraintVertical_bias="0.0"
         app:srcCompat="@drawable/lemainicio" />
 
     <Button
@@ -43,8 +41,10 @@
         android:textColor="@color/texto_sobre_primario"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnRegister"
+        app:layout_constraintVertical_bias="0.76" />
 
     <Button
         android:id="@+id/btnRegister"
@@ -52,13 +52,14 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
+        android:layout_marginTop="36dp"
         android:layout_marginEnd="32dp"
-        android:layout_marginBottom="30dp"
         android:backgroundTint="@color/color_naranja_oscuro"
         android:text="@string/registrate"
         android:textColor="@color/texto_sobre_primario"
-        app:layout_constraintBottom_toTopOf="@+id/btnLogin"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageViewLema" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

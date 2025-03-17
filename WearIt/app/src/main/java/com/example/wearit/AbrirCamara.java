@@ -18,12 +18,20 @@ import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -40,16 +48,38 @@ public class AbrirCamara extends Fragment {
     private static final int REQUEST_CAMERA_PERMISSION = 100;
     private static final String TAG = "AbrirCamara";
 
+    private FirebaseAuth mAuth;
+    private DatabaseReference usuariosRef;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        // Inicializar Firebase Auth y Database
+        mAuth = FirebaseAuth.getInstance();
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        usuariosRef = database.getReference("usuarios");
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        // Inflar el layout del fragmento
         View view = inflater.inflate(R.layout.fragment_abrir_camara, container, false);
 
+        // Referencia al botón
         Button btnOpenCamera = view.findViewById(R.id.btn_open_camera);
+
+        // Configurar el OnClickListener
         btnOpenCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // Verificar permisos de la cámara
                 checkCameraPermission();
+
+                // Navegar a otro fragmento usando NavController
+                NavController navController = Navigation.findNavController(v);
+                navController.navigate(R.id.action_abrirCamara_to_fragment_w200000_inicio_app); // Asegúrate de que "ac" sea una acción válida en tu nav_graph.xml
             }
         });
 
@@ -118,7 +148,7 @@ public class AbrirCamara extends Fragment {
         // Crear la solicitud HTTP
         Request request = new Request.Builder()
                 .url("https://api.imgur.com/3/image")
-                .header("Authorization", "eee6402d2d3ba0a") // Reemplaza YOUR_CLIENT_ID con tu Client-ID
+                .header("Authorization", "eee6402d2d3ba0a") // Reemplaza con tu Client-ID
                 .post(requestBody)
                 .build();
 
@@ -156,11 +186,55 @@ public class AbrirCamara extends Fragment {
             String imageUrl = data.get("link").getAsString();
 
             // Mostrar el enlace de la imagen
-            getActivity().runOnUiThread(() -> Toast.makeText(getActivity(), "Imagen subida: " + imageUrl, Toast.LENGTH_LONG).show());
+            getActivity().runOnUiThread(() -> {
+                Toast.makeText(getActivity(), "Imagen subida: " + imageUrl, Toast.LENGTH_LONG).show();
+                subirPrendaAFirebase(imageUrl); // Subir la prenda a Firebase
+            });
         } catch (Exception e) {
             // Manejar el error
             Log.e(TAG, "Error al procesar la respuesta: " + e.getMessage());
             getActivity().runOnUiThread(() -> Toast.makeText(getActivity(), "Error al procesar la respuesta", Toast.LENGTH_SHORT).show());
+        }
+    }
+
+    private void subirPrendaAFirebase(String imageUrl) {
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+
+        if (currentUser != null) {
+            String uid = currentUser.getUid();
+            String nombre = currentUser.getDisplayName(); // Obtener el nombre del usuario
+            String email = currentUser.getEmail();       // Obtener el email del usuario
+
+            // Crear un objeto Prenda
+            Map<String, Object> prenda = new HashMap<>();
+            prenda.put("tipo", "camisa");
+            prenda.put("color", "azul");
+            prenda.put("talla", "M");
+            prenda.put("marca", "Zara");
+            prenda.put("fecha_compra", "2023-01-15");
+            prenda.put("imagen_url", imageUrl); // Agregar la URL de la imagen
+
+            // Crear un mapa para las prendas
+            Map<String, Object> prendas = new HashMap<>();
+            prendas.put("prenda1", prenda);
+
+            // Crear un mapa para el usuario
+            Map<String, Object> usuario = new HashMap<>();
+            usuario.put("id", uid);
+            usuario.put("nombre", nombre);
+            usuario.put("email", email);
+            usuario.put("prendas", prendas);
+
+            // Subir los datos a Firebase
+            usuariosRef.child(uid).setValue(usuario)
+                    .addOnSuccessListener(aVoid -> {
+                        Toast.makeText(getActivity(), "Prenda subida a Firebase", Toast.LENGTH_SHORT).show();
+                    })
+                    .addOnFailureListener(e -> {
+                        Toast.makeText(getActivity(), "Error al subir la prenda: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    });
+        } else {
+            Toast.makeText(getActivity(), "Usuario no autenticado", Toast.LENGTH_SHORT).show();
         }
     }
 }
