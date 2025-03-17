@@ -1,5 +1,6 @@
 package com.example.wearit;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -91,8 +92,11 @@ public class fragment_w01_0002_iniciarsesion extends Fragment {
                                     Toast.makeText(getContext(), "Inicio de sesión exitoso", Toast.LENGTH_SHORT).show();
 
                                     // Ejemplo: Navegar a otro fragmento
-                                    NavController navController = Navigation.findNavController(v);
-                                    navController.navigate(R.id.action_fragment_w01_0002_iniciarsesion_to_fragment_w02_0001_home2);
+                                        //NavController navController = Navigation.findNavController(v);
+                                        //navController.navigate(R.id.action_fragment_w01_0002_iniciarsesion_to_fragment_w02_0001_home2);
+                                    // Dentro del método onClick del botón de inicio de sesión
+                                    Intent intent = new Intent(getActivity(), activity_w020000_home_app.class);
+                                    startActivity(intent);
                                 }
                             } else {
                                 // Error en el inicio de sesión

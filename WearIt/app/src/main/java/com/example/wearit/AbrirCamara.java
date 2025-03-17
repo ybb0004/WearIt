@@ -77,9 +77,7 @@ public class AbrirCamara extends Fragment {
                 // Verificar permisos de la cámara
                 checkCameraPermission();
 
-                // Navegar a otro fragmento usando NavController
-                NavController navController = Navigation.findNavController(v);
-                navController.navigate(R.id.action_fragment_w01_0001_inicio_registro_to_fragment_w01_0002_iniciarsesion); // Asegúrate de que "ac" sea una acción válida en tu nav_graph.xml
+
             }
         });
 
