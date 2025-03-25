@@ -1,6 +1,10 @@
-# WearIt
+<!--# WearIt-->
 
-![WearIt Logo](ruta/a/tu/logo.png) <!-- Asegúrate de incluir la ruta correcta a tu logo -->
+<!-- Asegúrate de incluir la ruta correcta a tu logo -->
+<p align="center">
+    <img src="WearIt/app/src/main/res/drawable/wearit_logo_v2.png" alt="WearIt Logo" width="500" height="400">
+</p>
+
 
 ## Descripción
 **WearIt** es una aplicación móvil innovadora que combina tecnología de escaneo de etiquetas, recomendaciones de outfits personalizadas y funciones sociales. Diseñada para los amantes de la moda, WearIt optimiza tu estilo diario y fomenta una comunidad activa.
@@ -10,7 +14,7 @@
 ## 🌟 Características Principales
 - **Escaneo de Prendas**: Reconocimiento de prendas para añadir ropa a tu armario virtual.
 - **Recomendaciones Personalizadas**: Algoritmo que sugiere outfits según tus prendas y el clima actual.
-- **Red Social**: Interactúa con amigos, comparte tus estilos y participa en [desafíos de moda](#desafíos-de-moda).
+- **Red Social**: Interactúa con amigos, comparte tus estilos y participa en desafíos de moda.
 - **Filtros de Búsqueda**: Encuentra prendas por color, tipo, temporada o estilo.
 - **Calendario de Outfits**: Planifica tus outfits para la semana o eventos especiales.
 - **Intercambio de Prendas**: Promueve la sostenibilidad y la creatividad a través del intercambio de ropa.
