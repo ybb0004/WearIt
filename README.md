@@ -14,7 +14,7 @@
 ## 🌟 Características Principales
 - **Escaneo de Prendas**: Reconocimiento de prendas para añadir ropa a tu armario virtual.
 - **Recomendaciones Personalizadas**: Algoritmo que sugiere outfits según tus prendas y el clima actual.
-- **Red Social**: Interactúa con amigos, comparte tus estilos y participa en [desafíos de moda](#desafíos-de-moda).
+- **Red Social**: Interactúa con amigos, comparte tus estilos y participa en desafíos de moda.
 - **Filtros de Búsqueda**: Encuentra prendas por color, tipo, temporada o estilo.
 - **Calendario de Outfits**: Planifica tus outfits para la semana o eventos especiales.
 - **Intercambio de Prendas**: Promueve la sostenibilidad y la creatividad a través del intercambio de ropa.
