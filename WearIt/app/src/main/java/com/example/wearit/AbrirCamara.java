@@ -1,9 +1,12 @@
 package com.example.wearit;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -18,8 +21,6 @@ import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -32,6 +33,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -47,6 +49,8 @@ public class AbrirCamara extends Fragment {
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private static final int REQUEST_CAMERA_PERMISSION = 100;
     private static final String TAG = "AbrirCamara";
+    private static final String IMGUR_CLIENT_ID = "eee6402d2d3ba0a"; // Reemplaza con tu Client-ID real
+    private static final long MAX_IMAGE_SIZE_BYTES = 10 * 1024 * 1024; // 10MB límite de Imgur
 
     private FirebaseAuth mAuth;
     private DatabaseReference usuariosRef;
@@ -54,8 +58,6 @@ public class AbrirCamara extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        // Inicializar Firebase Auth y Database
         mAuth = FirebaseAuth.getInstance();
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         usuariosRef = database.getReference("usuarios");
@@ -64,29 +66,19 @@ public class AbrirCamara extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        // Inflar el layout del fragmento
         View view = inflater.inflate(R.layout.fragment_abrir_camara, container, false);
 
-        // Referencia al botón
         Button btnOpenCamera = view.findViewById(R.id.btn_open_camera);
-
-        // Configurar el OnClickListener
-        btnOpenCamera.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Verificar permisos de la cámara
-                checkCameraPermission();
-
-
-            }
-        });
+        btnOpenCamera.setOnClickListener(v -> checkCameraPermission());
 
         return view;
     }
 
     private void checkCameraPermission() {
-        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.CAMERA}, REQUEST_CAMERA_PERMISSION);
+        if (ContextCompat.checkSelfPermission(requireActivity(), Manifest.permission.CAMERA)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(requireActivity(),
+                    new String[]{Manifest.permission.CAMERA}, REQUEST_CAMERA_PERMISSION);
         } else {
             openCamera();
         }
@@ -95,144 +87,192 @@ public class AbrirCamara extends Fragment {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == REQUEST_CAMERA_PERMISSION) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                openCamera();
-            } else {
-                Toast.makeText(getActivity(), "Permiso de cámara denegado", Toast.LENGTH_SHORT).show();
-            }
+        if (requestCode == REQUEST_CAMERA_PERMISSION &&
+                grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            openCamera();
+        } else {
+            showToast("Permiso de cámara denegado");
         }
     }
 
     private void openCamera() {
+        if (!isNetworkAvailable()) {
+            showToast("No hay conexión a internet");
+            return;
+        }
+
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
+        if (takePictureIntent.resolveActivity(requireActivity().getPackageManager()) != null) {
             startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
         } else {
-            Toast.makeText(getActivity(), "No se encontró una aplicación de cámara", Toast.LENGTH_SHORT).show();
+            showToast("No se encontró una aplicación de cámara");
         }
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == getActivity().RESULT_OK) {
-            if (data != null && data.getExtras() != null) {
-                // Obtener la imagen capturada como un Bitmap
-                Bitmap imageBitmap = (Bitmap) data.getExtras().get("data");
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == getActivity().RESULT_OK && data != null) {
+            Bundle extras = data.getExtras();
+            if (extras != null) {
+                Bitmap imageBitmap = (Bitmap) extras.get("data");
+                if (imageBitmap != null) {
+                    // Generar hash único para verificar que cada imagen es diferente
+                    int imageHash = imageBitmap.hashCode();
+                    Log.d(TAG, "Hash de la imagen capturada: " + imageHash);
 
-                // Subir la imagen a Imgur
-                uploadImageToImgur(imageBitmap);
+                    uploadImageToImgur(imageBitmap);
+                }
             }
         }
     }
 
-    private byte[] bitmapToByteArray(Bitmap bitmap) {
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
-        return byteArrayOutputStream.toByteArray();
-    }
-
     private void uploadImageToImgur(Bitmap bitmap) {
-        // Convertir el Bitmap a un arreglo de bytes
-        byte[] imageBytes = bitmapToByteArray(bitmap);
+        if (!isNetworkAvailable()) {
+            showToast("No hay conexión a internet");
+            return;
+        }
 
-        // Crear el cuerpo de la solicitud
+        // Generar nombre de archivo único con timestamp
+        String timestamp = String.valueOf(System.currentTimeMillis());
+        String filename = "wearit_" + timestamp + ".jpg";
+
+        byte[] imageBytes = bitmapToByteArray(bitmap);
+        if (imageBytes == null || imageBytes.length == 0) {
+            showToast("Error al procesar la imagen");
+            return;
+        }
+
+        Log.d(TAG, "Subiendo imagen a Imgur. Tamaño: " + imageBytes.length + " bytes");
+
         RequestBody requestBody = new MultipartBody.Builder()
                 .setType(MultipartBody.FORM)
-                .addFormDataPart("image", "image.jpg", RequestBody.create(imageBytes, MediaType.parse("image/jpeg")))
+                .addFormDataPart("image", filename,
+                        RequestBody.create(imageBytes, MediaType.parse("image/jpeg")))
                 .build();
 
-        // Crear la solicitud HTTP
+        OkHttpClient client = new OkHttpClient.Builder()
+                .connectTimeout(30, TimeUnit.SECONDS)
+                .readTimeout(30, TimeUnit.SECONDS)
+                .writeTimeout(30, TimeUnit.SECONDS)
+                .build();
+
         Request request = new Request.Builder()
                 .url("https://api.imgur.com/3/image")
-                .header("Authorization", "eee6402d2d3ba0a") // Reemplaza con tu Client-ID
+                .header("Authorization", "Client-ID " + IMGUR_CLIENT_ID)
                 .post(requestBody)
                 .build();
 
-        // Enviar la solicitud
-        OkHttpClient client = new OkHttpClient();
         client.newCall(request).enqueue(new Callback() {
             @Override
-            public void onFailure(Call call, IOException e) {
-                // Manejar el error
-                Log.e(TAG, "Error al subir la imagen: " + e.getMessage());
-                getActivity().runOnUiThread(() -> Toast.makeText(getActivity(), "Error al subir la imagen", Toast.LENGTH_SHORT).show());
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                logError("Error en la conexión: " + e.getMessage());
+                showToast("Error de conexión con Imgur");
             }
 
             @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                if (response.isSuccessful()) {
-                    // Procesar la respuesta
-                    String responseBody = response.body().string();
-                    Log.d(TAG, "Respuesta de Imgur: " + responseBody);
-                    getActivity().runOnUiThread(() -> handleImgurResponse(responseBody));
-                } else {
-                    // Manejar el error
-                    Log.e(TAG, "Error en la respuesta de Imgur: " + response.message());
-                    getActivity().runOnUiThread(() -> Toast.makeText(getActivity(), "Error en la respuesta de Imgur", Toast.LENGTH_SHORT).show());
+            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                String responseBody = response.body() != null ? response.body().string() : "";
+                if (!response.isSuccessful()) {
+                    String errorMsg = parseImgurError(responseBody, response.code());
+                    logError("Error en Imgur (" + response.code() + "): " + errorMsg);
+                    showToast("Error al subir imagen: " + errorMsg);
+                    return;
+                }
+
+                try {
+                    JsonObject jsonResponse = JsonParser.parseString(responseBody).getAsJsonObject();
+                    JsonObject data = jsonResponse.getAsJsonObject("data");
+                    String imageUrl = data.get("link").getAsString();
+                    String deleteHash = data.get("deletehash").getAsString();
+
+                    Log.d(TAG, "Imagen subida exitosamente. URL: " + imageUrl);
+                    Log.d(TAG, "Deletehash: " + deleteHash);
+
+                    runOnUiThread(() -> {
+                        showToast("Imagen subida exitosamente");
+                        subirPrendaAFirebase(imageUrl, deleteHash);
+                    });
+                } catch (Exception e) {
+                    logError("Error al procesar respuesta: " + e.getMessage());
+                    showToast("Error al procesar respuesta de Imgur");
                 }
             }
         });
     }
 
-    private void handleImgurResponse(String responseBody) {
-        try {
-            // Analizar la respuesta JSON
-            JsonObject jsonResponse = JsonParser.parseString(responseBody).getAsJsonObject();
-            JsonObject data = jsonResponse.getAsJsonObject("data");
-            String imageUrl = data.get("link").getAsString();
+    private void subirPrendaAFirebase(String imageUrl, String deleteHash) {
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser == null) {
+            showToast("Usuario no autenticado");
+            return;
+        }
 
-            // Mostrar el enlace de la imagen
-            getActivity().runOnUiThread(() -> {
-                Toast.makeText(getActivity(), "Imagen subida: " + imageUrl, Toast.LENGTH_LONG).show();
-                subirPrendaAFirebase(imageUrl); // Subir la prenda a Firebase
-            });
+        Map<String, Object> prenda = new HashMap<>();
+        prenda.put("tipo", "camisa");
+        prenda.put("color", "azul");
+        prenda.put("talla", "M");
+        prenda.put("marca", "Zara");
+        prenda.put("fecha_compra", "2023-01-15");
+        prenda.put("imagen_url", imageUrl);
+        prenda.put("delete_hash", deleteHash); // Guardar el deletehash por si necesitas borrarla después
+        prenda.put("timestamp", System.currentTimeMillis());
+
+        // Generar una nueva clave única para cada prenda
+        DatabaseReference nuevaPrendaRef = usuariosRef.child(currentUser.getUid())
+                .child("prendas")
+                .push();
+
+        nuevaPrendaRef.setValue(prenda)
+                .addOnSuccessListener(aVoid -> {
+                    Log.d(TAG, "Prenda guardada en Firebase con ID: " + nuevaPrendaRef.getKey());
+                    showToast("Prenda guardada en Firebase");
+                })
+                .addOnFailureListener(e -> {
+                    logError("Error al guardar prenda: " + e.getMessage());
+                    showToast("Error al guardar prenda");
+                });
+    }
+
+    private byte[] bitmapToByteArray(Bitmap bitmap) {
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 85, byteArrayOutputStream);
+        return byteArrayOutputStream.toByteArray();
+    }
+
+    private String parseImgurError(String responseBody, int code) {
+        try {
+            JsonObject json = JsonParser.parseString(responseBody).getAsJsonObject();
+            if (json.has("data")) {
+                JsonObject data = json.getAsJsonObject("data");
+                if (data.has("error")) {
+                    return data.get("error").getAsString();
+                }
+            }
+            return "Error desconocido (código " + code + ")";
         } catch (Exception e) {
-            // Manejar el error
-            Log.e(TAG, "Error al procesar la respuesta: " + e.getMessage());
-            getActivity().runOnUiThread(() -> Toast.makeText(getActivity(), "Error al procesar la respuesta", Toast.LENGTH_SHORT).show());
+            return "Error al parsear respuesta (código " + code + ")";
         }
     }
 
-    private void subirPrendaAFirebase(String imageUrl) {
-        FirebaseUser currentUser = mAuth.getCurrentUser();
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager =
+                (ConnectivityManager) requireContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    }
 
-        if (currentUser != null) {
-            String uid = currentUser.getUid();
-            String nombre = currentUser.getDisplayName(); // Obtener el nombre del usuario
-            String email = currentUser.getEmail();       // Obtener el email del usuario
+    private void showToast(String message) {
+        runOnUiThread(() -> Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show());
+    }
 
-            // Crear un objeto Prenda
-            Map<String, Object> prenda = new HashMap<>();
-            prenda.put("tipo", "camisa");
-            prenda.put("color", "azul");
-            prenda.put("talla", "M");
-            prenda.put("marca", "Zara");
-            prenda.put("fecha_compra", "2023-01-15");
-            prenda.put("imagen_url", imageUrl); // Agregar la URL de la imagen
+    private void logError(String message) {
+        Log.e(TAG, message);
+    }
 
-            // Crear un mapa para las prendas
-            Map<String, Object> prendas = new HashMap<>();
-            prendas.put("prenda1", prenda);
-
-            // Crear un mapa para el usuario
-            Map<String, Object> usuario = new HashMap<>();
-            usuario.put("id", uid);
-            usuario.put("nombre", nombre);
-            usuario.put("email", email);
-            usuario.put("prendas", prendas);
-
-            // Subir los datos a Firebase
-            usuariosRef.child(uid).setValue(usuario)
-                    .addOnSuccessListener(aVoid -> {
-                        Toast.makeText(getActivity(), "Prenda subida a Firebase", Toast.LENGTH_SHORT).show();
-                    })
-                    .addOnFailureListener(e -> {
-                        Toast.makeText(getActivity(), "Error al subir la prenda: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                    });
-        } else {
-            Toast.makeText(getActivity(), "Usuario no autenticado", Toast.LENGTH_SHORT).show();
+    private void runOnUiThread(Runnable action) {
+        if (getActivity() != null) {
+            getActivity().runOnUiThread(action);
         }
     }
 }

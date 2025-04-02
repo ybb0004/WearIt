@@ -18,7 +18,7 @@
     <string name="nombre">Nombre</string>
     <string name="IntroduzcionDeDatos">Introduce los siguientes datos:</string>
     <string name="usuario">Usuario</string>
-    <string name="leyPrivacidad">Acepta nuestra ley de privacidad</string>
+    <string name="leyPrivacidad">Acepta nuestra Política de Privacidad</string>
     <string name="Continuar">Continuar</string>
     <string name="day_night_icon_desc">Indicador de día o noche</string>
     <string name="weather_icon_desc">Indicador del clima</string>

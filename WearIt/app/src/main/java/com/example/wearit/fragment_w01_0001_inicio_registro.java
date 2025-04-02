@@ -31,6 +31,7 @@ public class fragment_w01_0001_inicio_registro extends Fragment {
         ImageView logo = view.findViewById(R.id.imageViewLogo);
         ImageView lema = view.findViewById(R.id.imageViewLema);
         MaterialButton btnLogin = view.findViewById(R.id.btnLogin);
+
         MaterialButton btnRegister = view.findViewById(R.id.btnRegister);
 
         // Cargar animaciones
@@ -46,8 +47,10 @@ public class fragment_w01_0001_inicio_registro extends Fragment {
             @Override
             public void onClick(View v) {
                 v.startAnimation(buttonScale);
-                // Navegar al fragmento de registro
-                // Obtener el NavController
+                //navegar hasta el formulario de registro
+                NavController navController = Navigation.findNavController(v);
+                navController.navigate(R.id.action_fragment_w01_0001_inicio_registro_to_fragment_w01_0003_registro3);
+
 
 
 
