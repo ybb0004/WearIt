@@ -53,4 +53,20 @@
     <!--Colores de Pagina Iniciar Sesion-->
     <color name="color_google">#DB4437</color> <!-- Color de Google -->
     <color name="color_facebook">#4267B2</color> <!-- Color de Facebook -->
+
+
+
+        <color name="dark_orange">#FF5722</color>
+        <color name="light_orange">#FF9800</color>
+        <color name="red">#F44336</color>
+        <color name="pink">#E91E63</color>
+        <color name="purple">#9C27B0</color>
+        <color name="indigo">#3F51B5</color>
+        <color name="blue">#2196F3</color>
+        <color name="green">#4CAF50</color>
+        <color name="yellow">#FFEB3B</color>
+        <color name="brown">#795548</color>
+        <color name="gray">#9E9E9E</color>
+
+
 </resources>

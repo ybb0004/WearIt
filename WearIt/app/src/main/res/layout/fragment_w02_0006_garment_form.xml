@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/gradient_background"
+    tools:context=".fragment_w02_0006_garment_form">
+
+    <!-- Botón Atrás (Fijo con Elevación Alta) -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/backButton"
+        style="@style/Widget.Material3.Button.Icon"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:backgroundTint="@color/color_naranja_oscuro"
+        android:contentDescription="@string/atras"
+        app:cornerRadius="24dp"
+        app:elevation="12dp"
+        app:icon="@drawable/ic_arrow_back_24px"
+        app:iconTint="@color/white"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:rippleColor="@color/gris_50" />
+
+    <!-- Círculo con Ícono de Foto -->
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/garmentImage"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="24dp"
+        android:contentDescription="@string/garment_image"
+        android:src="@drawable/ic_camera_24px"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/backButton"
+        app:shapeAppearanceOverlay="@style/CircleImageView"
+        android:scaleType="centerInside"
+        app:strokeColor="@color/color_naranja_oscuro"
+        app:strokeWidth="2dp" />
+
+    <!-- Contenido Desplazable -->
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/garmentImage">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp">
+
+            <!-- Campo: Talla (Spinner) -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/sizeInputLayout"
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:hint="@string/garment_size"
+                app:boxStrokeColor="@color/color_naranja_oscuro"
+                app:hintTextColor="@color/color_naranja_oscuro"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <Spinner
+                    android:id="@+id/sizeSpinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:entries="@array/garment_sizes" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Campo: Marca (AutoCompleteTextView) -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/brandInputLayout"
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:hint="@string/garment_brand"
+                app:boxStrokeColor="@color/color_naranja_oscuro"
+                app:hintTextColor="@color/color_naranja_oscuro"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/sizeInputLayout">
+
+                <AutoCompleteTextView
+                    android:id="@+id/brandInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text"
+                    android:dropDownHeight="200dp"
+                    android:entries="@array/garment_sizes" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Campo: Temporada (Spinner) -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/seasonInputLayout"
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:hint="@string/garment_season"
+                app:boxStrokeColor="@color/color_naranja_oscuro"
+                app:hintTextColor="@color/color_naranja_oscuro"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/brandInputLayout">
+
+                <Spinner
+                    android:id="@+id/seasonSpinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:entries="@array/garment_seasons" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Campo: Color (AutoCompleteTextView con Previsualización) -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/colorInputLayout"
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:hint="@string/garment_color"
+                app:boxStrokeColor="@color/color_naranja_oscuro"
+                app:hintTextColor="@color/color_naranja_oscuro"
+                app:endIconMode="custom"
+                app:endIconDrawable="@drawable/ic_color_picker_24px"
+                app:endIconContentDescription="@string/select_color"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/seasonInputLayout">
+
+                <AutoCompleteTextView
+                    android:id="@+id/colorInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text"
+                    android:dropDownHeight="200dp"
+                    android:entries="@array/garment_colors" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Círculo de Previsualización del Color -->
+            <View
+                android:id="@+id/colorPreview"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginEnd="8dp"
+                android:background="@drawable/circle_shape"
+                app:layout_constraintBottom_toBottomOf="@id/colorInputLayout"
+                app:layout_constraintEnd_toEndOf="@id/colorInputLayout"
+                app:layout_constraintTop_toTopOf="@id/colorInputLayout" />
+
+            <!-- Campo: Parte (Spinner) -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/partInputLayout"
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:hint="@string/garment_part"
+                app:boxStrokeColor="@color/color_naranja_oscuro"
+                app:hintTextColor="@color/color_naranja_oscuro"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/colorInputLayout">
+
+                <Spinner
+                    android:id="@+id/partSpinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:entries="@array/garment_parts" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Campo: Estilo (Spinner) -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/styleInputLayout"
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:hint="@string/garment_style"
+                app:boxStrokeColor="@color/color_naranja_oscuro"
+                app:hintTextColor="@color/color_naranja_oscuro"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/partInputLayout">
+
+                <Spinner
+                    android:id="@+id/styleSpinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:entries="@array/garment_styles" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Botón Guardar -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/saveButton"
+                style="@style/Widget.Material3.Button.ElevatedButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:layout_marginBottom="16dp"
+                android:backgroundTint="@color/color_naranja_claro"
+                android:text="@string/save_garment"
+                android:textColor="@color/white"
+                app:cornerRadius="12dp"
+                app:elevation="8dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/styleInputLayout" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

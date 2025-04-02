@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Opciones para la talla -->
+    <string-array name="garment_sizes">
+        <item>-</item>
+        <item>XS</item>
+        <item>S</item>
+        <item>M</item>
+        <item>L</item>
+        <item>XL</item>
+        <item>XXL</item>
+    </string-array>
+
+    <!-- Opciones para la marca -->
+    <string-array name="garment_brands">
+        <item>Zara</item>
+        <item>HyM</item>
+        <item>Adidas</item>
+        <item>Nike</item>
+        <item>Uniqlo</item>
+        <item>Levi\'s</item>
+        <item>Mango</item>
+        <item>Gucci</item>
+        <item>Prada</item>
+    </string-array>
+
+    <!-- Opciones para la temporada -->
+    <string-array name="garment_seasons">
+        <item>-</item>
+        <item>Primavera</item>
+        <item>Verano</item>
+        <item>Otoño</item>
+        <item>Invierno</item>
+    </string-array>
+
+    <!-- Opciones para el color (string-array) -->
+    <string-array name="garment_colors">
+        <item>#FF5722</item> <!-- Naranja oscuro -->
+        <item>#FF9800</item> <!-- Naranja claro -->
+        <item>#F44336</item> <!-- Rojo -->
+        <item>#E91E63</item> <!-- Rosa -->
+        <item>#9C27B0</item> <!-- Púrpura -->
+        <item>#3F51B5</item> <!-- Índigo -->
+        <item>#2196F3</item> <!-- Azul -->
+        <item>#4CAF50</item> <!-- Verde -->
+        <item>#FFEB3B</item> <!-- Amarillo -->
+        <item>#795548</item> <!-- Marrón -->
+        <item>#9E9E9E</item> <!-- Gris -->
+        <item>#000000</item> <!-- Negro -->
+        <item>#FFFFFF</item> <!-- Blanco -->
+    </string-array>
+
+    <!-- Opciones para la parte -->
+    <string-array name="garment_parts">
+        <item>-</item>
+        <item>Superior</item>
+        <item>Inferior</item>
+        <item>Zapatilla</item>
+    </string-array>
+
+    <!-- Opciones para el estilo -->
+    <string-array name="garment_styles">
+        <item>-</item>
+        <item>Skinny</item>
+        <item>Oversize</item>
+        <item>Regular</item>
+        <item>Bootcut</item>
+        <item>Flare</item>
+        <item>Athleisure</item>
+    </string-array>
+
+    <!-- SOLUCIÓN RECOMENDADA: Usando referencias a colors.xml -->
+    <integer-array name="color_picker_colors">
+        <item>@color/dark_orange</item>
+        <item>@color/light_orange</item>
+        <item>@color/red</item>
+        <item>@color/pink</item>
+        <item>@color/purple</item>
+        <item>@color/indigo</item>
+        <item>@color/blue</item>
+        <item>@color/green</item>
+        <item>@color/yellow</item>
+        <item>@color/brown</item>
+        <item>@color/gray</item>
+        <item>@color/black</item>
+        <item>@color/white</item>
+    </integer-array>
+
+    <!-- ALTERNATIVA: Usando valores enteros directamente -->
+    <!--
+    <integer-array name="color_picker_colors">
+        <item>0xFFFF5722</item>
+        <item>0xFFFF9800</item>
+        <item>0xFFF44336</item>
+        <item>0xFFE91E63</item>
+        <item>0xFF9C27B0</item>
+        <item>0xFF3F51B5</item>
+        <item>0xFF2196F3</item>
+        <item>0xFF4CAF50</item>
+        <item>0xFFFFEB3B</item>
+        <item>0xFF795548</item>
+        <item>0xFF9E9E9E</item>
+        <item>0xFF000000</item>
+        <item>0xFFFFFFFF</item>
+    </integer-array>
+    -->
+</resources>
