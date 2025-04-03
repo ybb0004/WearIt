@@ -35,4 +35,16 @@
     <string name="amante_moda">Amante de la moda</string>
     <string name="followers">Followers</string>
     <string name="outfits">Outfits</string>
+
+    <string name="add_garment">Agregar Prenda</string>
+    <string name="garment_size">Talla</string>
+    <string name="garment_brand">Marca</string>
+    <string name="garment_season">Temporada</string>
+    <string name="garment_color">Color</string>
+    <string name="garment_part">Parte</string>
+    <string name="garment_style">Estilo</string>
+    <string name="save_garment">Guardar</string>
+
+    <string name="select_color">Seleccionar Color</string>
+    <string name="garment_image">Imagen de la prenda</string>
 </resources>

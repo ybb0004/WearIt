@@ -1,42 +1,38 @@
 package com.example.wearit;
 
-public class Garment {
+import java.io.Serializable;
 
-        private String id;
-        private String category;
-        private String color;
-        private String createdAt;
-        private String imageUrl;
-        private String length;
-        private String name;
-        private String notes;
-        private String occasion;
-        private String season;
-        private String style;
-        private String type;
-        private String userId;
-        private String username;
-        private String email;
+// Clase que representa una prenda con sus atributos
+public class Garment implements Serializable {
+
+        private String id; // ID único (necesario para Firebase)
+        private String size; // Talla
+        private String brand; // Marca
+        private String season; // Temporada
+        private String color; // Color
+        private String part; // Parte (Superior, Inferior, Zapatilla)
+        private String style; // Estilo
+        private String imageUrl; // URI de la imagen
+        private String createdAt; // Fecha de creación (necesario para Firebase)
+        private String userId; // ID del usuario (necesario para Firebase)
+        private String username; // Nombre de usuario (necesario para Firebase)
+        private String email; // Correo del usuario (necesario para Firebase)
 
         // Constructor vacío (necesario para Firebase)
         public Garment() {}
 
-        // Constructor con parámetros
-        public Garment(String id, String category, String color, String createdAt, String imageUrl,
-                       String length, String name, String notes, String occasion, String season,
-                       String style, String type, String userId,String username, String email) {
+        // Constructor completo
+        public Garment(String id, String size, String brand, String season, String color, String part, String style,
+                       String imageUrl, String createdAt, String userId, String username, String email) {
                 this.id = id;
-                this.category = category;
-                this.color = color;
-                this.createdAt = createdAt;
-                this.imageUrl = imageUrl;
-                this.length = length;
-                this.name = name;
-                this.notes = notes;
-                this.occasion = occasion;
+                this.size = size;
+                this.brand = brand;
                 this.season = season;
+                this.color = color;
+                this.part = part;
                 this.style = style;
-                this.type = type;
+                this.imageUrl = imageUrl;
+                this.createdAt = createdAt;
                 this.userId = userId;
                 this.username = username;
                 this.email = email;
@@ -46,38 +42,29 @@ public class Garment {
         public String getId() { return id; }
         public void setId(String id) { this.id = id; }
 
-        public String getCategory() { return category; }
-        public void setCategory(String category) { this.category = category; }
+        public String getSize() { return size; }
+        public void setSize(String size) { this.size = size; }
 
-        public String getColor() { return color; }
-        public void setColor(String color) { this.color = color; }
-
-        public String getCreatedAt() { return createdAt; }
-        public void setCreatedAt(String createdAt) { this.createdAt = createdAt; }
-
-        public String getImageUrl() { return imageUrl; }
-        public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
-
-        public String getLength() { return length; }
-        public void setLength(String length) { this.length = length; }
-
-        public String getName() { return name; }
-        public void setName(String name) { this.name = name; }
-
-        public String getNotes() { return notes; }
-        public void setNotes(String notes) { this.notes = notes; }
-
-        public String getOccasion() { return occasion; }
-        public void setOccasion(String occasion) { this.occasion = occasion; }
+        public String getBrand() { return brand; }
+        public void setBrand(String brand) { this.brand = brand; }
 
         public String getSeason() { return season; }
         public void setSeason(String season) { this.season = season; }
 
+        public String getColor() { return color; }
+        public void setColor(String color) { this.color = color; }
+
+        public String getPart() { return part; }
+        public void setPart(String part) { this.part = part; }
+
         public String getStyle() { return style; }
         public void setStyle(String style) { this.style = style; }
 
-        public String getType() { return type; }
-        public void setType(String type) { this.type = type; }
+        public String getImageUrl() { return imageUrl; }
+        public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
+
+        public String getCreatedAt() { return createdAt; }
+        public void setCreatedAt(String createdAt) { this.createdAt = createdAt; }
 
         public String getUserId() { return userId; }
         public void setUserId(String userId) { this.userId = userId; }
@@ -87,5 +74,4 @@ public class Garment {
 
         public String getEmail() { return email; }
         public void setEmail(String email) { this.email = email; }
-
 }

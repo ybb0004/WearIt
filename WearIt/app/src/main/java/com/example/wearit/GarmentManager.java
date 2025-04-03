@@ -15,26 +15,23 @@ public class GarmentManager {
     }
 
     // Método para guardar una prenda
-    public static void saveGarment(String category, String color, String imageUrl, String length,
-                            String name, String notes, String occasion, String season,
-                            String style, String type, String userId, String username, String email) {
+    public static void saveGarment(String size, String brand, String season, String color, String part,
+                                   String style, String imageUrl, String userId, String username, String email,
+                                   SaveGarmentCallback callback) {
         // Generar un ID único para la prenda
         String id = databaseReference.push().getKey();
 
         // Crear el objeto Garment
         Garment garment = new Garment(
                 id,
-                category,
-                color,
-                new Date().toString(), // Fecha actual (puedes usar ISOString si lo prefieres)
-                imageUrl,
-                length,
-                name,
-                notes,
-                occasion,
+                size,
+                brand,
                 season,
+                color,
+                part,
                 style,
-                type,
+                imageUrl,
+                new Date().toString(), // Fecha actual (puedes usar ISOString si lo prefieres)
                 userId,
                 username,
                 email
@@ -45,10 +42,19 @@ public class GarmentManager {
             databaseReference.child(id).setValue(garment)
                     .addOnSuccessListener(aVoid -> {
                         System.out.println("Prenda guardada correctamente con ID: " + id);
+                        callback.onSuccess(id); // Llama al callback en caso de éxito
                     })
                     .addOnFailureListener(e -> {
                         System.err.println("Error al guardar la prenda: " + e.getMessage());
+                        callback.onFailure(e.getMessage()); // Llama al callback en caso de fallo
                     });
+        } else {
+            callback.onFailure("Error al generar el ID de la prenda");
         }
+    }
+
+    public interface SaveGarmentCallback {
+        void onSuccess(String garmentId);
+        void onFailure(String errorMessage);
     }
 }
