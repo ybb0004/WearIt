@@ -31,6 +31,9 @@ import com.google.gson.JsonParser;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -204,16 +207,23 @@ public class AbrirCamara extends Fragment {
     private void subirPrendaAFirebase(String imageUrl, String deleteHash) {
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser == null) {
-            showToast("Usuario no autenticado");
+            showToast("Usuario no autenticado, inicia sesión de nuevo");
             return;
         }
+        LocalDateTime fechaHoraActual = LocalDateTime.now();
+
+        // Define el formato deseado: día/mes/año:horas:minutos
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/M/yyyy:HH:mm");
+
+        String fechaFormateada = fechaHoraActual.format(formatter);
+
 
         Map<String, Object> prenda = new HashMap<>();
         prenda.put("tipo", "camisa");
         prenda.put("color", "azul");
         prenda.put("talla", "M");
         prenda.put("marca", "Zara");
-        prenda.put("fecha_compra", "2023-01-15");
+        prenda.put("fecha_subida", fechaFormateada);
         prenda.put("imagen_url", imageUrl);
         prenda.put("delete_hash", deleteHash); // Guardar el deletehash por si necesitas borrarla después
         prenda.put("timestamp", System.currentTimeMillis());
