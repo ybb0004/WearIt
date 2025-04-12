@@ -43,6 +43,9 @@ public class fragment_w01_0002_iniciarsesion extends Fragment {
         TextInputEditText userField = view.findViewById(R.id.textInputEditTextUser);
         TextInputEditText passwordField = view.findViewById(R.id.textInputEditTextPassword);
 
+        userField.setText("test@wearit.com"); //valores por defecto para pruebas
+        passwordField.setText("wearit2025");//valores por defecto para pruebas
+
         // Cargar animaciones
         Animation fadeInScale = AnimationUtils.loadAnimation(getContext(), R.anim.entrada_logo);
         Animation buttonScale = AnimationUtils.loadAnimation(getContext(), R.anim.button_scale);

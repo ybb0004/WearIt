@@ -28,17 +28,22 @@ public class activity_w020000_home_app extends AppCompatActivity {
                 // Manejar la navegación según el ítem seleccionado
                 int itemId = item.getItemId();
                 if (itemId == R.id.item_1) {
+                    navController.navigate(R.id.action_fragment_w02_0001_home_self);
 
                     return true;
                 } else if (itemId == R.id.item_2) {
                     // Navegar a otro fragmento (si es necesario)
+                    navController.navigate(R.id.action_fragment_w02_0001_home_to_fragment_w02_0002_buscar_lupita);
+
                     return true;
                 } else if (itemId == R.id.item_3) {
                     // Navegar al fragmento de la cámara
-                    navController.navigate(R.id.action_fragment_w02_0001_home_to_abrirCamara);
+                    navController.navigate(R.id.action_fragment_w02_0001_home_to_fragment_w02_0006_garment_form);
                     return true;
                 } else if (itemId == R.id.item_4) {
                     // Navegar a otro fragmento (si es necesario)
+                    navController.navigate(R.id.action_fragment_w02_0001_home_to_fragment_w02_0004_calendario);
+
                     return true;
                 } else if (itemId == R.id.item_5) {
                     // Navegar a otro fragmento (si es necesario)
