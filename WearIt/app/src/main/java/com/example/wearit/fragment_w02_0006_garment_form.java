@@ -9,7 +9,6 @@ import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.Editable;
@@ -22,11 +21,8 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
-import android.widget.Spinner;
 import android.widget.Toast;
 
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
@@ -48,9 +44,12 @@ import com.google.gson.JsonParser;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -69,15 +68,15 @@ public class fragment_w02_0006_garment_form extends Fragment {
     private static final String IMGUR_CLIENT_ID = "eee6402d2d3ba0a"; // Reemplaza con tu Client-ID real
 
     private ShapeableImageView garmentImage;
-    private Spinner sizeSpinner;
+    private AutoCompleteTextView sizeInput;
     private AutoCompleteTextView brandInput;
     private TextInputLayout brandInputLayout;
-    private Spinner seasonSpinner;
+    private AutoCompleteTextView seasonInput;
     private AutoCompleteTextView colorInput;
     private TextInputLayout colorInputLayout;
     private View colorPreview;
-    private Spinner partSpinner;
-    private Spinner styleSpinner;
+    private AutoCompleteTextView partInput;
+    private AutoCompleteTextView styleInput;
     private MaterialButton backButton;
     private MaterialButton saveButton;
 
@@ -85,8 +84,8 @@ public class fragment_w02_0006_garment_form extends Fragment {
     private FirebaseAuth mAuth;
     private DatabaseReference usuariosRef;
     private ActivityResultLauncher<Intent> cameraLauncher;
+    private List<ColorItem> colorItems;
 
-    // Corregido: Declaración de los contenedores TextInputLayout
     private TextInputLayout sizeInputLayout;
     private TextInputLayout seasonInputLayout;
     private TextInputLayout partInputLayout;
@@ -99,7 +98,6 @@ public class fragment_w02_0006_garment_form extends Fragment {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         usuariosRef = database.getReference("usuarios");
 
-        // Inicializar el launcher para la cámara
         cameraLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
@@ -123,8 +121,9 @@ public class fragment_w02_0006_garment_form extends Fragment {
         View view = inflater.inflate(R.layout.fragment_w02_0006_garment_form, container, false);
 
         initializeViews(view);
+        setupAutoCompleteTextViews();
+        setupColorAdapter();
         setupAnimations(view);
-        setupSpinners();
         setupListeners(view);
 
         return view;
@@ -132,49 +131,105 @@ public class fragment_w02_0006_garment_form extends Fragment {
 
     private void initializeViews(View view) {
         garmentImage = view.findViewById(R.id.garmentImage);
-
-        // Corregido: Asignar correctamente los spinners y sus contenedores
-        sizeSpinner = view.findViewById(R.id.sizeSpinner);
-        sizeInputLayout = view.findViewById(R.id.sizeInputLayout); // Asume que este ID existe en tu layout
-
+        sizeInput = view.findViewById(R.id.sizeInput);
+        sizeInputLayout = view.findViewById(R.id.sizeInputLayout);
         brandInput = view.findViewById(R.id.brandInput);
         brandInputLayout = view.findViewById(R.id.brandInputLayout);
-
-        seasonSpinner = view.findViewById(R.id.seasonSpinner);
-        seasonInputLayout = view.findViewById(R.id.seasonInputLayout); // Asume que este ID existe en tu layout
-
+        seasonInput = view.findViewById(R.id.seasonInput);
+        seasonInputLayout = view.findViewById(R.id.seasonInputLayout);
         colorInput = view.findViewById(R.id.colorInput);
         colorInputLayout = view.findViewById(R.id.colorInputLayout);
         colorPreview = view.findViewById(R.id.colorPreview);
-
-        partSpinner = view.findViewById(R.id.partSpinner);
-        partInputLayout = view.findViewById(R.id.partInputLayout); // Asume que este ID existe en tu layout
-
-        styleSpinner = view.findViewById(R.id.styleSpinner);
-        styleInputLayout = view.findViewById(R.id.styleInputLayout); // Asume que este ID existe en tu layout
-
+        partInput = view.findViewById(R.id.partInput);
+        partInputLayout = view.findViewById(R.id.partInputLayout);
+        styleInput = view.findViewById(R.id.styleInput);
+        styleInputLayout = view.findViewById(R.id.styleInputLayout);
         backButton = view.findViewById(R.id.backButton);
         saveButton = view.findViewById(R.id.saveButton);
+    }
+
+    private void setupAutoCompleteTextViews() {
+        // Talla
+        String[] sizes = getResources().getStringArray(R.array.garment_sizes);
+        ArrayAdapter<String> sizeAdapter = new ArrayAdapter<>(
+                requireContext(),
+                android.R.layout.simple_dropdown_item_1line,
+                sizes
+        );
+        sizeInput.setAdapter(sizeAdapter);
+
+        // Marca
+        String[] brands = getResources().getStringArray(R.array.garment_brands);
+        ArrayAdapter<String> brandAdapter = new ArrayAdapter<>(
+                requireContext(),
+                android.R.layout.simple_dropdown_item_1line,
+                brands
+        );
+        brandInput.setAdapter(brandAdapter);
+
+        // Temporada
+        String[] seasons = getResources().getStringArray(R.array.garment_seasons);
+        ArrayAdapter<String> seasonAdapter = new ArrayAdapter<>(
+                requireContext(),
+                android.R.layout.simple_dropdown_item_1line,
+                seasons
+        );
+        seasonInput.setAdapter(seasonAdapter);
+
+        // Parte
+        String[] parts = getResources().getStringArray(R.array.garment_parts);
+        ArrayAdapter<String> partAdapter = new ArrayAdapter<>(
+                requireContext(),
+                android.R.layout.simple_dropdown_item_1line,
+                parts
+        );
+        partInput.setAdapter(partAdapter);
+
+        // Estilo
+        String[] styles = getResources().getStringArray(R.array.garment_styles);
+        ArrayAdapter<String> styleAdapter = new ArrayAdapter<>(
+                requireContext(),
+                android.R.layout.simple_dropdown_item_1line,
+                styles
+        );
+        styleInput.setAdapter(styleAdapter);
+    }
+
+    private void setupColorAdapter() {
+        String[] colorNames = getResources().getStringArray(R.array.color_names);
+        String[] colorHexCodes = getResources().getStringArray(R.array.color_hex_codes);
+        colorItems = new ArrayList<>();
+        for (int i = 0; i < colorNames.length; i++) {
+            colorItems.add(new ColorItem(colorNames[i], colorHexCodes[i]));
+        }
+
+        ArrayAdapter<ColorItem> colorAdapter = new ArrayAdapter<>(
+                requireContext(),
+                android.R.layout.simple_dropdown_item_1line,
+                colorItems
+        );
+        colorInput.setAdapter(colorAdapter);
     }
 
     private void setupAnimations(View view) {
         Animation fadeInAnimation = AnimationUtils.loadAnimation(getContext(), R.anim.fade_in);
         garmentImage.startAnimation(fadeInAnimation);
-        sizeSpinner.startAnimation(fadeInAnimation);
+        sizeInput.startAnimation(fadeInAnimation);
         brandInput.startAnimation(fadeInAnimation);
-        seasonSpinner.startAnimation(fadeInAnimation);
+        seasonInput.startAnimation(fadeInAnimation);
         colorInput.startAnimation(fadeInAnimation);
-        partSpinner.startAnimation(fadeInAnimation);
-        styleSpinner.startAnimation(fadeInAnimation);
+        partInput.startAnimation(fadeInAnimation);
+        styleInput.startAnimation(fadeInAnimation);
         saveButton.startAnimation(fadeInAnimation);
-    }
-
-    private void setupSpinners() {
-        sizeSpinner.setSelection(2); // Selección por defecto para talla
     }
 
     private void setupListeners(View view) {
         garmentImage.setOnClickListener(v -> checkCameraPermission());
+
+        colorInput.setOnItemClickListener((parent, view1, position, id) -> {
+            ColorItem selectedColor = (ColorItem) parent.getItemAtPosition(position);
+            updateColorPreview(selectedColor.getHexCode());
+        });
 
         colorInput.addTextChangedListener(new TextWatcher() {
             @Override
@@ -182,11 +237,22 @@ public class fragment_w02_0006_garment_form extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                updateColorPreview(s.toString().trim());
+                String colorText = s.toString().trim();
+                for (ColorItem item : colorItems) {
+                    if (item.getName().equalsIgnoreCase(colorText)) {
+                        updateColorPreview(item.getHexCode());
+                        return;
+                    }
+                }
+                updateColorPreview(null);
             }
 
             @Override
             public void afterTextChanged(Editable s) {}
+        });
+
+        backButton.setOnClickListener(v -> {
+            requireActivity().getSupportFragmentManager().popBackStack();
         });
 
         saveButton.setOnClickListener(v -> {
@@ -235,23 +301,22 @@ public class fragment_w02_0006_garment_form extends Fragment {
     private boolean validateForm(View view) {
         boolean isValid = true;
 
-        // Corregido: Uso correcto de los contenedores TextInputLayout para mostrar errores
-        if (sizeSpinner.getSelectedItem().toString().equals("-")) {
-            sizeInputLayout.setError("Selecciona una talla");
+        if (sizeInput.getText().toString().trim().isEmpty() || sizeInput.getText().toString().trim().equals("-")) {
+            sizeInputLayout.setError("Selecciona una talla válida");
             isValid = false;
         } else {
             sizeInputLayout.setError(null);
         }
 
-        if (brandInput.getText().toString().trim().isEmpty()) {
-            brandInputLayout.setError("Ingresa una marca");
+        if (brandInput.getText().toString().trim().isEmpty() || brandInput.getText().toString().trim().equals("-")) {
+            brandInputLayout.setError("Ingresa una marca válida");
             isValid = false;
         } else {
             brandInputLayout.setError(null);
         }
 
-        if (seasonSpinner.getSelectedItem().toString().equals("-")) {
-            seasonInputLayout.setError("Selecciona una temporada");
+        if (seasonInput.getText().toString().trim().isEmpty() || seasonInput.getText().toString().trim().equals("-")) {
+            seasonInputLayout.setError("Selecciona una temporada válida");
             isValid = false;
         } else {
             seasonInputLayout.setError(null);
@@ -264,15 +329,15 @@ public class fragment_w02_0006_garment_form extends Fragment {
             colorInputLayout.setError(null);
         }
 
-        if (partSpinner.getSelectedItem().toString().equals("-")) {
-            partInputLayout.setError("Selecciona una parte");
+        if (partInput.getText().toString().trim().isEmpty() || partInput.getText().toString().trim().equals("-")) {
+            partInputLayout.setError("Selecciona una parte válida");
             isValid = false;
         } else {
             partInputLayout.setError(null);
         }
 
-        if (styleSpinner.getSelectedItem().toString().equals("-")) {
-            styleInputLayout.setError("Selecciona un estilo");
+        if (styleInput.getText().toString().trim().isEmpty() || styleInput.getText().toString().trim().equals("-")) {
+            styleInputLayout.setError("Selecciona un estilo válido");
             isValid = false;
         } else {
             styleInputLayout.setError(null);
@@ -379,40 +444,48 @@ public class fragment_w02_0006_garment_form extends Fragment {
         }
 
         String userEmail = currentUser.getEmail();
-        // Reemplazamos los puntos en el email ya que Firebase no permite puntos en las claves
         String emailKey = userEmail.replace(".", "_");
 
-        LocalDateTime fechaHoraActual = LocalDateTime.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/M/yyyy:HH:mm");
-        String fechaFormateada = fechaHoraActual.format(formatter);
+        SimpleDateFormat sdf = new SimpleDateFormat("d/M/yyyy:HH:mm", Locale.getDefault());
+        String fechaFormateada = sdf.format(new Date());
+
+        String colorName = colorInput.getText().toString().trim();
+        String colorHex = "";
+        for (ColorItem item : colorItems) {
+            if (item.getName().equalsIgnoreCase(colorName)) {
+                colorHex = item.getHexCode();
+                break;
+            }
+        }
+
+        if (colorHex.isEmpty()) {
+            colorHex = "#FFFFFF";
+            Snackbar.make(view, "Color no válido, usando blanco por defecto", Snackbar.LENGTH_SHORT).show();
+        }
 
         Map<String, Object> prenda = new HashMap<>();
-        prenda.put("tipo", partSpinner.getSelectedItem().toString());
-        prenda.put("color", colorInput.getText().toString().trim());
-        prenda.put("talla", sizeSpinner.getSelectedItem().toString());
+        prenda.put("tipo", partInput.getText().toString().trim());
+        prenda.put("color", colorHex);
+        prenda.put("talla", sizeInput.getText().toString().trim());
         prenda.put("marca", brandInput.getText().toString().trim());
-        prenda.put("temporada", seasonSpinner.getSelectedItem().toString());
-        prenda.put("estilo", styleSpinner.getSelectedItem().toString());
+        prenda.put("temporada", seasonInput.getText().toString().trim());
+        prenda.put("estilo", styleInput.getText().toString().trim());
         prenda.put("fecha_subida", fechaFormateada);
         prenda.put("imagen_url", imageUrl);
         prenda.put("delete_hash", deleteHash);
         prenda.put("timestamp", System.currentTimeMillis());
 
-        // Primero obtenemos la referencia del usuario por email
         DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("usuarios").child(emailKey);
 
-        // Consultamos cuántas prendas tiene ya para asignar el siguiente número
         userRef.child("prendas").get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 int nextPrendaNumber = 1;
                 if (task.getResult().exists()) {
-                    // Si ya existen prendas, contamos cuántas hay para asignar el siguiente número
                     nextPrendaNumber = (int) task.getResult().getChildrenCount() + 1;
                 }
 
                 String prendaId = "prenda" + nextPrendaNumber;
 
-                // Guardamos la prenda con el ID secuencial
                 userRef.child("prendas").child(prendaId).setValue(prenda)
                         .addOnSuccessListener(aVoid -> {
                             Log.d(TAG, "Prenda guardada en Firebase con ID: " + prendaId);
@@ -432,7 +505,7 @@ public class fragment_w02_0006_garment_form extends Fragment {
 
     private void updateColorPreview(String colorText) {
         try {
-            int color = Color.parseColor(colorText);
+            int color = Color.parseColor(colorText != null ? colorText : "#FFFFFF");
             GradientDrawable drawable = (GradientDrawable) colorPreview.getBackground();
             drawable.setColor(color);
         } catch (IllegalArgumentException e) {

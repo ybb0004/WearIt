@@ -13,6 +13,7 @@
 
     <!-- Opciones para la marca -->
     <string-array name="garment_brands">
+        <item>-</item>
         <item>Zara</item>
         <item>HyM</item>
         <item>Adidas</item>
@@ -33,21 +34,37 @@
         <item>Invierno</item>
     </string-array>
 
-    <!-- Opciones para el color (string-array) -->
-    <string-array name="garment_colors">
-        <item>#FF5722</item> <!-- Naranja oscuro -->
-        <item>#FF9800</item> <!-- Naranja claro -->
-        <item>#F44336</item> <!-- Rojo -->
-        <item>#E91E63</item> <!-- Rosa -->
-        <item>#9C27B0</item> <!-- Púrpura -->
-        <item>#3F51B5</item> <!-- Índigo -->
-        <item>#2196F3</item> <!-- Azul -->
-        <item>#4CAF50</item> <!-- Verde -->
-        <item>#FFEB3B</item> <!-- Amarillo -->
-        <item>#795548</item> <!-- Marrón -->
-        <item>#9E9E9E</item> <!-- Gris -->
-        <item>#000000</item> <!-- Negro -->
-        <item>#FFFFFF</item> <!-- Blanco -->
+    <!-- Opciones para el color (nombres y códigos hexadecimales) -->
+    <string-array name="color_names">
+        <item>Naranja Oscuro</item>
+        <item>Naranja Claro</item>
+        <item>Rojo</item>
+        <item>Rosa</item>
+        <item>Púrpura</item>
+        <item>Índigo</item>
+        <item>Azul</item>
+        <item>Verde</item>
+        <item>Amarillo</item>
+        <item>Marrón</item>
+        <item>Gris</item>
+        <item>Negro</item>
+        <item>Blanco</item>
+    </string-array>
+
+    <string-array name="color_hex_codes">
+        <item>#FF5722</item>
+        <item>#FF9800</item>
+        <item>#F44336</item>
+        <item>#E91E63</item>
+        <item>#9C27B0</item>
+        <item>#3F51B5</item>
+        <item>#2196F3</item>
+        <item>#4CAF50</item>
+        <item>#FFEB3B</item>
+        <item>#795548</item>
+        <item>#9E9E9E</item>
+        <item>#000000</item>
+        <item>#FFFFFF</item>
     </string-array>
 
     <!-- Opciones para la parte -->
@@ -68,40 +85,4 @@
         <item>Flare</item>
         <item>Athleisure</item>
     </string-array>
-
-    <!-- SOLUCIÓN RECOMENDADA: Usando referencias a colors.xml -->
-    <integer-array name="color_picker_colors">
-        <item>@color/dark_orange</item>
-        <item>@color/light_orange</item>
-        <item>@color/red</item>
-        <item>@color/pink</item>
-        <item>@color/purple</item>
-        <item>@color/indigo</item>
-        <item>@color/blue</item>
-        <item>@color/green</item>
-        <item>@color/yellow</item>
-        <item>@color/brown</item>
-        <item>@color/gray</item>
-        <item>@color/black</item>
-        <item>@color/white</item>
-    </integer-array>
-
-    <!-- ALTERNATIVA: Usando valores enteros directamente -->
-    <!--
-    <integer-array name="color_picker_colors">
-        <item>0xFFFF5722</item>
-        <item>0xFFFF9800</item>
-        <item>0xFFF44336</item>
-        <item>0xFFE91E63</item>
-        <item>0xFF9C27B0</item>
-        <item>0xFF3F51B5</item>
-        <item>0xFF2196F3</item>
-        <item>0xFF4CAF50</item>
-        <item>0xFFFFEB3B</item>
-        <item>0xFF795548</item>
-        <item>0xFF9E9E9E</item>
-        <item>0xFF000000</item>
-        <item>0xFFFFFFFF</item>
-    </integer-array>
-    -->
 </resources>
