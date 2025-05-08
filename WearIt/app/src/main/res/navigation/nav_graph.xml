@@ -13,23 +13,12 @@
             android:id="@+id/action_fragment_w02_0001_home_to_abrirCamara"
             app:destination="@id/abrirCamara" />
         <action
-            android:id="@+id/action_fragment_w02_0001_home_to_fragment_w02_0002_buscar_lupita"
-            app:destination="@id/fragment_w02_0002_buscar_lupita" />
-        <action
-            android:id="@+id/action_fragment_w02_0001_home_to_fragment_w02_0004_calendario"
-            app:destination="@id/fragment_w02_0004_calendario" />
-        <action
             android:id="@+id/action_fragment_w02_0001_home_self"
             app:destination="@id/fragment_w02_0001_home" />
         <action
             android:id="@+id/action_fragment_w02_0001_home_to_fragment_w02_0006_garment_form"
             app:destination="@id/fragment_w02_0006_garment_form" />
     </fragment>
-    <fragment
-        android:id="@+id/fragment_w02_0003_registrar_ropa"
-        android:name="com.example.wearit.fragment_w02_0003_registrar_ropa"
-        android:label="fragment_w02_0003_registrar_ropa"
-        tools:layout="@layout/fragment_w02_0003_registrar_ropa" />
     <fragment
         android:id="@+id/fragment_w02_0005_perfil"
         android:name="com.example.wearit.fragment_w02_0005_perfil"
@@ -53,18 +42,4 @@
             android:id="@+id/action_fragment_w02_0006_garment_form_to_fragment_w02_0001_home"
             app:destination="@id/fragment_w02_0001_home" />
     </fragment>
-    <fragment
-        android:id="@+id/fragment_w02_0002_buscar_lupita"
-        android:name="com.example.wearit.fragment_w02_0002_buscar_lupita"
-        android:label="fragment_w02_0002_buscar_lupita"
-        tools:layout="@layout/fragment_w02_0002_buscar_lupita" >
-        <action
-            android:id="@+id/action_fragment_w02_0002_buscar_lupita_to_fragment_w02_0001_home"
-            app:destination="@id/fragment_w02_0001_home" />
-    </fragment>
-    <fragment
-        android:id="@+id/fragment_w02_0004_calendario"
-        android:name="com.example.wearit.fragment_w02_0004_calendario"
-        android:label="fragment_w02_0004_calendario"
-        tools:layout="@layout/fragment_w02_0004_calendario" />
 </navigation>

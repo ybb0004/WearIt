@@ -4,23 +4,21 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
-import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
-import com.bumptech.glide.load.model.GlideUrl;
-import com.bumptech.glide.load.model.LazyHeaders;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.google.firebase.auth.FirebaseAuth;
@@ -30,9 +28,16 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.database.annotations.Nullable;
 
-import androidx.annotation.NonNull;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Random;
 
 public class fragment_w02_0001_home extends Fragment {
     private static final String TAG = "HomeFragment";
@@ -42,13 +47,19 @@ public class fragment_w02_0001_home extends Fragment {
     private ImageView dayNightIcon;
 
     // Imágenes de prendas
-    private ImageView topGarmentImage;
-    private ImageView bottomGarmentImage;
-    private ImageView shoesGarmentImage;
+    private ImageView tshirtImage;
+    private ImageView pantsImage;
+    private ImageView shoesImage;
+    private Button generateOutfitButton;
 
     // Referencias a Firebase
-    private DatabaseReference prendasRef;
+    private DatabaseReference clothesRef;
     private FirebaseUser currentUser;
+
+    // Listas para almacenar las prendas
+    private List<String> superiorUrls = new ArrayList<>();
+    private List<String> inferiorUrls = new ArrayList<>();
+    private List<String> zapatillaUrls = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -57,107 +68,142 @@ public class fragment_w02_0001_home extends Fragment {
         // Inicializar vistas
         dayNightIcon = view.findViewById(R.id.dayNightIcon);
         timeText = view.findViewById(R.id.timeText);
-        ImageView weatherIcon = view.findViewById(R.id.weatherIcon);
-        TextView temperatureText = view.findViewById(R.id.temperatureText);
-
-        // Inicializar imágenes de prendas
-        topGarmentImage = view.findViewById(R.id.imageView2);
-        bottomGarmentImage = view.findViewById(R.id.imageView3);
-        shoesGarmentImage = view.findViewById(R.id.imageView4);
+        tshirtImage = view.findViewById(R.id.imageView2);
+        pantsImage = view.findViewById(R.id.imageView3);
+        shoesImage = view.findViewById(R.id.imageView4);
+        generateOutfitButton = view.findViewById(R.id.iconButton);
 
         // Configuración inicial
         updateTimeAndDayNight();
 
-        // Configurar Clima y Temperatura (simulación)
-        weatherIcon.setImageResource(R.drawable.cloud_24px);
-        temperatureText.setText("25°C");
-
         // Inicializar Firebase y cargar prendas
         initializeFirebase();
-        loadGarmentsFromFirebase();
+        loadClothesFromFirebase();
+
+        // Configurar botón para generar outfit
+        generateOutfitButton.setOnClickListener(v -> generateRandomOutfit());
 
         return view;
     }
 
     private void initializeFirebase() {
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
-        if (currentUser != null && currentUser.getEmail() != null) {
-            String emailKey = currentUser.getEmail().replace(".", "_");
-            prendasRef = FirebaseDatabase.getInstance().getReference("usuarios").child(emailKey).child("prendas");
+        if (currentUser != null) {
+            // Usar un usuario de prueba si queremos forzar los datos
+            String emailKey = "test@wearit_com"; // Usuario fijo para pruebas
+            // O usar el email del usuario actual (descomentar la siguiente línea)
+            // String emailKey = currentUser.getEmail().replace(".", "_");
+            clothesRef = FirebaseDatabase.getInstance().getReference("usuarios").child(emailKey).child("prendas");
         }
     }
 
-    private void loadGarmentsFromFirebase() {
-        if (prendasRef == null) {
+    private void loadClothesFromFirebase() {
+        if (clothesRef == null) {
             Log.e(TAG, "La referencia a Firebase es nula");
             return;
         }
 
-        prendasRef.addListenerForSingleValueEvent(new ValueEventListener() { // Cambiado a single event
+        clothesRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Map<String, String> prendasMap = new HashMap<>();
+                superiorUrls.clear();
+                inferiorUrls.clear();
+                zapatillaUrls.clear();
 
-                for (DataSnapshot prendaSnapshot : dataSnapshot.getChildren()) {
-                    String tipo = prendaSnapshot.child("tipo").getValue(String.class);
-                    String imageUrl = prendaSnapshot.child("imagen_url").getValue(String.class);
+                for (DataSnapshot garmentSnapshot : dataSnapshot.getChildren()) {
+                    String imageUrl = garmentSnapshot.child("imagen_url").getValue(String.class);
+                    String garmentType = garmentSnapshot.child("tipo").getValue(String.class);
 
-                    if (tipo != null && imageUrl != null) {
-                        tipo = tipo.toLowerCase(Locale.ROOT);
-                        prendasMap.put(tipo, imageUrl);
+                    if (imageUrl != null && garmentType != null) {
+                        // Log para depuración
+                        Log.d(TAG, "Prenda cargada: " + garmentType + " - " + imageUrl);
+
+                        switch (garmentType.toLowerCase()) {
+                            case "superior":
+                                superiorUrls.add(imageUrl);
+                                break;
+                            case "inferior":
+                                inferiorUrls.add(imageUrl);
+                                break;
+                            case "zapatilla":
+                            case "v": // Este tipo aparece en tus datos
+                                zapatillaUrls.add(imageUrl);
+                                break;
+                        }
                     }
                 }
 
-                // Asignar después de tener todas las prendas
-                loadImageWithGlide(prendasMap.get("superior"), topGarmentImage, R.drawable.camiseta);
-                loadImageWithGlide(prendasMap.get("inferior"), bottomGarmentImage, R.drawable.pantalon);
-                loadImageWithGlide(prendasMap.get("calzado"), shoesGarmentImage, R.drawable.zapatilla);
+                // Log para depuración
+                Log.d(TAG, "Prendas cargadas: Superior=" + superiorUrls.size() +
+                        ", Inferior=" + inferiorUrls.size() +
+                        ", Zapatilla=" + zapatillaUrls.size());
+
+                // Mostrar un outfit inicial si hay suficientes prendas
+                if (!superiorUrls.isEmpty() && !inferiorUrls.isEmpty() && !zapatillaUrls.isEmpty()) {
+                    generateRandomOutfit();
+                } else {
+                    Toast.makeText(getContext(), "No hay suficientes prendas para generar un outfit completo", Toast.LENGTH_SHORT).show();
+                }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 Log.e(TAG, "Error al cargar datos: " + databaseError.getMessage());
+                Toast.makeText(getContext(), "Error al cargar prendas", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
-    /**
-     * Corrige la URL de Imgur para asegurar el formato correcto
-     */
-    private String fixImgurUrl(String url) {
-        if (url == null || url.isEmpty()) {
-            return null;
+    private void generateRandomOutfit() {
+        // Comprobar si hay contexto disponible
+        if (getContext() == null) {
+            Log.e(TAG, "El contexto es nulo");
+            return;
         }
 
-        // Si la URL no tiene protocolo, añadirlo
-        if (!url.startsWith("http")) {
-            url = "https://" + url;
+        // Comprobar si hay suficientes prendas
+        StringBuilder missing = new StringBuilder();
+        if (superiorUrls.isEmpty()) missing.append("superior ");
+        if (inferiorUrls.isEmpty()) missing.append("inferior ");
+        if (zapatillaUrls.isEmpty()) missing.append("zapatillas");
+
+        if (!missing.toString().isEmpty()) {
+            Toast.makeText(getContext(), "Faltan prendas: " + missing, Toast.LENGTH_LONG).show();
+            Log.d(TAG, "Faltan prendas: " + missing);
+            return;
         }
 
-        // Si es un enlace a la página en lugar de a la imagen directa
-        if (url.contains("imgur.com") && !url.contains("i.imgur.com")) {
-            url = url.replace("imgur.com", "i.imgur.com") + ".jpg";
-        }
+        try {
+            // Seleccionar aleatoriamente una prenda de cada tipo
+            Random random = new Random();
+            String randomSuperior = superiorUrls.get(random.nextInt(superiorUrls.size()));
+            String randomInferior = inferiorUrls.get(random.nextInt(inferiorUrls.size()));
+            String randomZapatilla = zapatillaUrls.get(random.nextInt(zapatillaUrls.size()));
 
-        // Si no tiene extensión, añadir .jpg
-        if (!url.contains(".")) {
-            url += ".jpg";
-        }
+            Log.d(TAG, "Outfit generado: " +
+                    "\nSuperior: " + randomSuperior +
+                    "\nInferior: " + randomInferior +
+                    "\nZapatilla: " + randomZapatilla);
 
-        Log.d(TAG, "URL corregida: " + url);
-        return url;
+            // Cargar las imágenes
+            loadImageWithGlide(randomSuperior, tshirtImage, R.drawable.camiseta);
+            loadImageWithGlide(randomInferior, pantsImage, R.drawable.pantalon);
+            loadImageWithGlide(randomZapatilla, shoesImage, R.drawable.zapatilla);
+
+            // Mostrar mensaje de éxito
+            Toast.makeText(getContext(), "¡Outfit generado con éxito!", Toast.LENGTH_SHORT).show();
+        } catch (Exception e) {
+            Log.e(TAG, "Error al generar outfit: " + e.getMessage());
+            Toast.makeText(getContext(), "Error al generar outfit", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void loadImageWithGlide(String imageUrl, ImageView imageView, int defaultImageResId) {
         if (getContext() == null) return;
 
         if (imageUrl != null && !imageUrl.trim().isEmpty()) {
-            Log.d(TAG, "Cargando imagen desde: " + imageUrl);
-
-            // Asegurar que la URL sea válida
-            if (!imageUrl.startsWith("http")) {
-                imageUrl = "https://" + imageUrl;
-            }
+            // Log para depuración
+            Log.d(TAG, "Cargando imagen: " + imageUrl);
 
             Glide.with(getContext())
                     .load(imageUrl)
@@ -165,48 +211,23 @@ public class fragment_w02_0001_home extends Fragment {
                     .error(defaultImageResId)
                     .listener(new RequestListener<Drawable>() {
                         @Override
-                        public boolean onLoadFailed(@Nullable GlideException e, Object model,
-                                                    Target<Drawable> target, boolean isFirstResource) {
-                            Log.e(TAG, "Error al cargar imagen: " + (e != null ? e.getMessage() : ""));
+                        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                            Log.e(TAG, "Error al cargar imagen: " + imageUrl + " - " + (e != null ? e.getMessage() : "desconocido"));
                             return false;
                         }
 
                         @Override
-                        public boolean onResourceReady(Drawable resource, Object model,
-                                                       Target<Drawable> target, DataSource dataSource,
-                                                       boolean isFirstResource) {
+                        public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                            Log.d(TAG, "Imagen cargada correctamente: " + imageUrl);
                             return false;
                         }
                     })
                     .into(imageView);
         } else {
-            Log.w(TAG, "URL vacía para " + imageView.getContentDescription());
+            Log.w(TAG, "URL de imagen vacía, usando imagen predeterminada");
             imageView.setImageResource(defaultImageResId);
         }
     }
-
-    private boolean isPrendaSuperior(String tipo) {
-        String tipoLower = tipo.toLowerCase();
-        return tipoLower.contains("camisa") || tipoLower.contains("camiseta") ||
-                tipoLower.contains("blusa") || tipoLower.contains("jersey") ||
-                tipoLower.contains("sudadera") || tipoLower.contains("chaqueta");
-    }
-
-    private boolean isPrendaInferior(String tipo) {
-        String tipoLower = tipo.toLowerCase();
-        return tipoLower.contains("pantalón") || tipoLower.contains("pantalon") ||
-                tipoLower.contains("falda") || tipoLower.contains("short") ||
-                tipoLower.contains("bermuda") || tipoLower.contains("jeans");
-    }
-
-    private boolean isCalzado(String tipo) {
-        String tipoLower = tipo.toLowerCase();
-        return tipoLower.contains("zapato") || tipoLower.contains("zapatilla") ||
-                tipoLower.contains("bota") || tipoLower.contains("sandalia") ||
-                tipoLower.contains("calzado");
-    }
-
-
 
     @Override
     public void onResume() {
@@ -240,18 +261,8 @@ public class fragment_w02_0001_home extends Fragment {
 
     private void updateTimeAndDayNight() {
         Calendar calendar = Calendar.getInstance();
-        int hour = calendar.get(Calendar.HOUR_OF_DAY);
         SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
         String currentTime = timeFormat.format(calendar.getTime());
-        /*
-        if (hour >= 6 && hour < 18) {
-            dayNightIcon.setImageResource(R.drawable.reloj);
-        } else {
-            dayNightIcon.setImageResource(R.drawable.reloj);
-        }
-        */
-        dayNightIcon.setImageResource(R.drawable.reloj); // poner icono reloj
-
-        timeText.setText(currentTime); //Actualizamos la hora cada min
+        timeText.setText(currentTime);
     }
 }
