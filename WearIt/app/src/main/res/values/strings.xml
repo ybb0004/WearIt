@@ -10,6 +10,7 @@
 
     <string name="Iniciar_sesion">Iniciar Sesion</string>
     <string name="hint_usuario_email">Usuario o Correo Electronico</string>
+    <string name="hint_email">Correo Electronico</string>
     <string name="hint_contrasena">Contraseña</string>
     <string name="toggle_ver_contraseña">Mostrar/Ocultar Contraseña</string>
     <string name="o">o</string>
@@ -49,5 +50,8 @@
     <string name="garment_image">Imagen de la prenda</string>
     <string name="prendas_escaneadas">Prendas</string>
     <string name="menu_prenda">Menu</string>
+    <string name="cambiar_foto_perfil">"Cambiar Foto "</string>
+    <string name="guardar">Guardar</string>
+    <string name="cerrar_sesion">Cerrar sesion</string>
 
 </resources>
