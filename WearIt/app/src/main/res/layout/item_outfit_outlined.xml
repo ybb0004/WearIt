@@ -10,28 +10,28 @@
     app:strokeColor="@color/color_naranja_oscuro"
     app:strokeWidth="2dp">
 
-<LinearLayout
-android:layout_width="match_parent"
-android:layout_height="wrap_content"
-android:orientation="vertical"
-android:padding="12dp">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="12dp">
 
-<com.google.android.material.imageview.ShapeableImageView
-    android:id="@+id/outfitImage"
-    android:layout_width="match_parent"
-    android:layout_height="160dp"
-    android:src="@drawable/camiseta"
-    android:contentDescription="@string/outfit_desc"
-    app:shapeAppearanceOverlay="@style/RoundedImageView"
-    android:scaleType="centerCrop" />
+        <ImageButton
+            android:id="@+id/menuButton"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/menu_prenda"
+            android:scaleType="center"
+            android:src="@drawable/ic_more_vert_24px" />
 
-<TextView
-    android:id="@+id/outfitTitle"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="Prenda Ejemplo(recoger_bd)"
-    android:textAppearance="?attr/textAppearanceBodyMedium"
-    android:textColor="@color/gris_700"
-    android:layout_marginTop="8dp" />
-</LinearLayout>
-    </com.google.android.material.card.MaterialCardView>
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/outfitImage"
+            android:layout_width="match_parent"
+            android:layout_height="160dp"
+            android:contentDescription="@string/outfit_desc"
+            android:scaleType="centerCrop"
+            android:src="@drawable/camiseta"
+            app:shapeAppearanceOverlay="@style/RoundedImageView" />
+
+    </RelativeLayout>
+</com.google.android.material.card.MaterialCardView>

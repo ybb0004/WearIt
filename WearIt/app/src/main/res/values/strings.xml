@@ -47,4 +47,7 @@
 
     <string name="select_color">Seleccionar Color</string>
     <string name="garment_image">Imagen de la prenda</string>
+    <string name="prendas_escaneadas">Prendas</string>
+    <string name="menu_prenda">Menu</string>
+
 </resources>

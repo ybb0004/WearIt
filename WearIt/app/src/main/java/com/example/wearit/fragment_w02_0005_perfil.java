@@ -1,11 +1,15 @@
 package com.example.wearit;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.PopupMenu;
+import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -16,142 +20,125 @@ import com.google.android.material.tabs.TabLayout;
 import java.util.ArrayList;
 import java.util.List;
 
-// Fragmento que muestra el perfil del usuario con una lista de prendas
 public class fragment_w02_0005_perfil extends Fragment {
 
-    // Declaración de vistas y variables
-    private RecyclerView outfitsRecyclerView; // RecyclerView para mostrar la lista de prendas
-    private OutfitAdapter outfitAdapter; // Adaptador para el RecyclerView
-    private List<Outfit> outfitList; // Lista de prendas
+    private RecyclerView outfitsRecyclerView;
+    private OutfitAdapter outfitAdapter;
+    private List<Outfit> allOutfits;
+    private List<Outfit> outfitList;
+    private TextView profileName, scannedCountView;
+    private MaterialButton settingsButton;
 
-    // Método que se llama al crear la vista del fragmento
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        // Infla el layout del fragmento (fragment_w02_0005_perfil.xml)
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_w02_0005_perfil, container, false);
 
-        // Inicializa las vistas del layout
-        MaterialButton backButton = (MaterialButton) view.findViewById(R.id.backButton);
-        MaterialButton settingsButton = (MaterialButton) view.findViewById(R.id.settingsButton);
-        TabLayout tabLayout = (TabLayout) view.findViewById(R.id.tabLayout);
-        outfitsRecyclerView = (RecyclerView) view.findViewById(R.id.outfitsRecyclerView);
+        // Referencias UI
+        settingsButton    = view.findViewById(R.id.settingsButton);
+        TabLayout tabLayout  = view.findViewById(R.id.tabLayout);
+        outfitsRecyclerView  = view.findViewById(R.id.outfitsRecyclerView);
+        profileName          = view.findViewById(R.id.profileName);
+        scannedCountView     = view.findViewById(R.id.scannedCount);
 
-        // Carga la animación de entrada (fade_in.xml)
-        Animation fadeInAnimation = AnimationUtils.loadAnimation(getContext(), R.anim.fade_in);
+        // Animaciones
+        Animation fadeIn = AnimationUtils.loadAnimation(getContext(), R.anim.fade_in);
+        view.findViewById(R.id.profileCard).startAnimation(fadeIn);
+        view.findViewById(R.id.statsContainer).startAnimation(fadeIn);
+        tabLayout.startAnimation(fadeIn);
+        outfitsRecyclerView.startAnimation(fadeIn);
 
-        // Aplica la animación a los elementos principales del layout
-        view.findViewById(R.id.profileCard).startAnimation(fadeInAnimation);
-        view.findViewById(R.id.statsContainer).startAnimation(fadeInAnimation);
-        tabLayout.startAnimation(fadeInAnimation);
-        outfitsRecyclerView.startAnimation(fadeInAnimation);
+        // Carga nombre de usuario
+        loadUserProfile();
 
-        // Configura el listener para el botón "Atrás"
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Aplica la animación al botón
-                v.startAnimation(fadeInAnimation);
-                // Regresa al fragmento anterior en la pila de navegación
-                getActivity().getSupportFragmentManager().popBackStack();
-            }
-        });
-
-        // Configura el listener para el botón de configuración
-        settingsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Aplica la animación al botón
-                v.startAnimation(fadeInAnimation);
-                // Aquí puedes añadir la lógica para navegar a la pantalla de configuración
-                // Por ejemplo: navegar a otro fragmento o actividad
-            }
-        });
-
-        // Inicializa la lista de prendas
-        outfitList = new ArrayList<>();
-        // Añade algunas prendas de ejemplo (puedes reemplazarlas con datos reales)
-        outfitList.add(new Outfit(R.drawable.camiseta, "Camiseta Ejemplo"));
-        outfitList.add(new Outfit(R.drawable.pantalon, "Pantalón Ejemplo"));
-
-        // Crea el adaptador para el RecyclerView y lo asigna
+        // Inicializa listas y adaptador
+        allOutfits    = new ArrayList<>();
+        outfitList    = new ArrayList<>();
         outfitAdapter = new OutfitAdapter(outfitList);
-        outfitsRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2)); // Cuadrícula de 2 columnas
+        outfitsRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
         outfitsRecyclerView.setAdapter(outfitAdapter);
 
-        // Configura el listener para las pestañas del TabLayout
+        // Carga datos y actualiza contador
+        loadAllOutfitsFromDB();
+        updateScannedCount();
+
+        // Pestaña por defecto
+        showCategory(Outfit.CATEGORY_SUPERIOR);
+
+        // Listener de pestañas
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                // Según la pestaña seleccionada, carga el contenido correspondiente
-                switch (tab.getPosition()) {
-                    case 0: // Pestaña "Prendas"
-                        loadOutfits();
-                        break;
-                    case 1: // Pestaña "Colecciones"
-                        loadCollections();
-                        break;
-                    case 2: // Pestaña "Guardados"
-                        loadSaved();
-                        break;
-                    case 3: // Pestaña "Me gusta"
-                        loadLikes();
-                        break;
-                }
+            @Override public void onTabSelected(TabLayout.Tab tab) {
+                int id = tab.getPosition();
+                if (id == 0) showCategory(Outfit.CATEGORY_SUPERIOR);
+                else if (id == 1) showCategory(Outfit.CATEGORY_INFERIOR);
+                else if (id == 2) showCategory(Outfit.CATEGORY_ZAPATILLA);
             }
-
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-                // No hacemos nada cuando se deselecciona una pestaña
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-                // No hacemos nada cuando se vuelve a seleccionar una pestaña
-            }
+            @Override public void onTabUnselected(TabLayout.Tab tab) { }
+            @Override public void onTabReselected(TabLayout.Tab tab) { }
         });
 
-        // Devuelve la vista inflada
+        // Menú desplegable en settingsButton
+        settingsButton.setOnClickListener(v -> {
+            PopupMenu popup = new PopupMenu(requireContext(), v);
+            popup.getMenuInflater().inflate(R.menu.menu_profile, popup.getMenu());
+            popup.setOnMenuItemClickListener(this::onProfileMenuItem);
+            popup.show();
+        });
+
         return view;
     }
 
-    // Método para cargar las prendas (pestaña "Prendas")
-    private void loadOutfits() {
-        // Limpia la lista actual
-        outfitList.clear();
-        // Añade prendas de ejemplo (reemplaza con datos reales)
-        outfitList.add(new Outfit(R.drawable.camiseta, "Camiseta Ejemplo"));
-        // Notifica al adaptador que los datos han cambiado
-        outfitAdapter.notifyDataSetChanged();
+    /** Gestión de las opciones del menú */
+    private boolean onProfileMenuItem(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_edit_profile) {
+            // Reemplaza R.id.fragment_container por el ID real de tu contenedor de fragments
+            requireActivity()
+                    .getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.profileRoot, new fragment_w02_0007_edit_profile())
+                    .addToBackStack(null)
+                    .commit();
+            return true;
+        }
+        else if (id == R.id.action_logout) {
+            // TODO: tu lógica de logout real
+            Intent intent = new Intent(requireActivity(), fragment_w01_0001_inicio_registro.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+            requireActivity().finish();
+            return true;
+        }
+        return false;
     }
 
-    // Método para cargar las colecciones (pestaña "Colecciones")
-    private void loadCollections() {
-        // Limpia la lista actual
-        outfitList.clear();
-        // Añade colecciones de ejemplo (reemplaza con datos reales)
-        outfitList.add(new Outfit(R.drawable.camiseta, "Colección Ejemplo"));
-        // Notifica al adaptador que los datos han cambiado
-        outfitAdapter.notifyDataSetChanged();
+    private void updateScannedCount() {
+        scannedCountView.setText(String.valueOf(allOutfits.size()));
     }
 
-    // Método para cargar los guardados (pestaña "Guardados")
-    private void loadSaved() {
-        // Limpia la lista actual
-        outfitList.clear();
-        // Añade elementos guardados de ejemplo (reemplaza con datos reales)
-        outfitList.add(new Outfit(R.drawable.camiseta, "Guardado Ejemplo"));
-        // Notifica al adaptador que los datos han cambiado
-        outfitAdapter.notifyDataSetChanged();
+    private void loadUserProfile() {
+        // TODO: leer usuario real de BD
+        String nombreDesdeBD = "Usuario Ejemplo";
+        profileName.setText(nombreDesdeBD);
     }
 
-    // Método para cargar los "Me gusta" (pestaña "Me gusta")
-    private void loadLikes() {
-        // Limpia la lista actual
+    private void loadAllOutfitsFromDB() {
+        // TODO: tu consulta real
+        allOutfits.clear();
+        allOutfits.add(new Outfit(R.drawable.camiseta, "Camiseta Azul", Outfit.CATEGORY_SUPERIOR));
+        allOutfits.add(new Outfit(R.drawable.pantalon, "Pantalón Negro", Outfit.CATEGORY_INFERIOR));
+        allOutfits.add(new Outfit(R.drawable.zapatilla, "Zapatilla Blanca", Outfit.CATEGORY_ZAPATILLA));
+    }
+
+    private void showCategory(String category) {
         outfitList.clear();
-        // Añade elementos "Me gusta" de ejemplo (reemplaza con datos reales)
-        outfitList.add(new Outfit(R.drawable.camiseta, "Me Gusta Ejemplo"));
-        // Notifica al adaptador que los datos han cambiado
+        for (Outfit o : allOutfits) {
+            if (category.equals(o.getCategory())) {
+                outfitList.add(o);
+            }
+        }
         outfitAdapter.notifyDataSetChanged();
     }
 }

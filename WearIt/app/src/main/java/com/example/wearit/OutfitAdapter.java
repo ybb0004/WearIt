@@ -94,7 +94,7 @@ public class OutfitAdapter extends RecyclerView.Adapter<OutfitAdapter.OutfitView
             // Inicializa las vistas del layout item_outfit_outlined.xml
             card = (MaterialCardView) itemView.findViewById(R.id.card);
             outfitImage = (ShapeableImageView) itemView.findViewById(R.id.outfitImage);
-            outfitTitle = (TextView) itemView.findViewById(R.id.outfitTitle);
+
         }
     }
 }

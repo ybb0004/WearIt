@@ -2,30 +2,43 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/profileRoot"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/gradient_background"
     tools:context=".fragment_w02_0005_perfil">
 
-    <!-- Botón Atrás (Fijo con Elevación Alta) -->
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/backButton"
-        style="@style/Widget.Material3.Button.Icon"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
+    <!-- Header: Logo + Nombre WearIt -->
+    <LinearLayout
+        android:id="@+id/headerLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:backgroundTint="@color/color_naranja_oscuro"
-        android:contentDescription="@string/atras"
-        app:cornerRadius="24dp"
-        app:elevation="12dp"
-    app:icon="@drawable/ic_arrow_back_24px"
-    app:iconTint="@color/white"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toTopOf="parent"
-    app:rippleColor="@color/gris_50" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-    <!-- Botón de Configuración (Fijo) -->
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/appLogo"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/wearit_logo_v2"
+            android:contentDescription="@string/app_name"
+            app:shapeAppearanceOverlay="@style/CircleImageView" />
+
+        <TextView
+            android:id="@+id/appName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/app_name"
+            android:textAppearance="?attr/textAppearanceHeadlineSmall"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="8dp"
+            android:textColor="@color/black" />
+    </LinearLayout>
+
+    <!-- Botón de Configuración (Desplegable) -->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/settingsButton"
         style="@style/Widget.Material3.Button.Icon"
@@ -48,17 +61,17 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:fillViewport="true"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/headerLayout"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/backButton">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingBottom="32dp">
 
-            <!-- Sección de Avatar y Nombre -->
+            <!-- Sección de Avatar y Nombre completo -->
             <androidx.cardview.widget.CardView
                 android:id="@+id/profileCard"
                 android:layout_width="0dp"
@@ -67,8 +80,8 @@
                 android:layout_marginTop="24dp"
                 app:cardCornerRadius="16dp"
                 app:cardElevation="8dp"
-                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
                 <LinearLayout
@@ -82,57 +95,42 @@
                         android:id="@+id/profileAvatar"
                         android:layout_width="80dp"
                         android:layout_height="80dp"
-                        android:background="?attr/selectableItemBackgroundBorderless"
                         android:contentDescription="@string/avatar_desc"
-                        android:elevation="1dp"
                         android:scaleType="centerCrop"
                         android:src="@drawable/wearit_logo_v2"
                         app:shapeAppearanceOverlay="@style/CircleImageView" />
 
-                    <LinearLayout
+                    <TextView
+                        android:id="@+id/profileName"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
                         android:layout_weight="1"
-                        android:orientation="vertical"
-                        android:paddingStart="16dp">
-
-                        <TextView
-                            android:id="@+id/profileName"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/usuario_ejemplo"
-                            android:textAppearance="?attr/textAppearanceHeadlineSmall"
-                            android:textColor="@color/black" />
-
-                        <TextView
-                            android:id="@+id/profileBio"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/amante_moda"
-                            android:textAppearance="?attr/textAppearanceBodyMedium"
-                            android:textColor="@color/gris_50" />
-                    </LinearLayout>
+                        android:text="Nombre Completo"
+                        android:textAppearance="?attr/textAppearanceHeadlineSmall"
+                        android:textColor="@color/black" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
-            <!-- Sección de Estadísticas (Outfits, Followers) -->
+            <!-- Sección de Estadísticas: Prendas Escaneadas + Nivel de estilo -->
             <LinearLayout
                 android:id="@+id/statsContainer"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"
                 android:layout_marginTop="16dp"
-                android:gravity="center"
                 android:orientation="horizontal"
-                app:layout_constraintEnd_toEndOf="parent"
+                android:gravity="center"
                 app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/profileCard">
 
+                <!-- Prendas Escaneadas -->
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="8dp"
                     android:layout_weight="1"
+                    android:layout_marginEnd="8dp"
                     app:cardCornerRadius="12dp"
                     app:cardElevation="4dp">
 
@@ -146,25 +144,26 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/outfits"
+                            android:text="@string/prendas_escaneadas"
                             android:textAppearance="?attr/textAppearanceBodyMedium"
                             android:textColor="@color/black" />
 
                         <TextView
-                            android:id="@+id/outfitsCount"
+                            android:id="@+id/scannedCount"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="12"
+                            android:text="0"
                             android:textAppearance="?attr/textAppearanceHeadlineSmall"
                             android:textColor="@color/color_naranja_oscuro" />
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
 
+                <!-- Nivel de estilo (solo visual) -->
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
                     android:layout_weight="1"
+                    android:layout_marginStart="8dp"
                     app:cardCornerRadius="12dp"
                     app:cardElevation="4dp">
 
@@ -178,60 +177,57 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/followers"
+                            android:text="Nivel de estilo"
                             android:textAppearance="?attr/textAppearanceBodyMedium"
                             android:textColor="@color/black" />
 
                         <TextView
-                            android:id="@+id/followersCount"
+                            android:id="@+id/styleLevel"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="45"
+                            android:text="★ 5"
                             android:textAppearance="?attr/textAppearanceHeadlineSmall"
                             android:textColor="@color/color_naranja_oscuro" />
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
             </LinearLayout>
 
-            <!-- Navegación Tabs -->
+            <!-- Navegación Tabs: Parte superior, Parte inferior, Zapatillas -->
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/tabLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"
                 android:layout_marginTop="24dp"
-                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/statsContainer"
-                app:tabBackground="@drawable/tab_background"
                 app:tabIndicatorColor="@color/color_naranja_oscuro"
                 app:tabIndicatorHeight="4dp"
-                app:tabMode="scrollable"
+                app:tabMode="fixed"
                 app:tabSelectedTextColor="@color/color_naranja_oscuro"
                 app:tabTextColor="@color/gris_50">
 
                 <com.google.android.material.tabs.TabItem
+                    android:id="@+id/tabUpper"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/prendas" />
+                    android:text="Parte superior" />
 
                 <com.google.android.material.tabs.TabItem
+                    android:id="@+id/tabLower"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/colecciones" />
+                    android:text="Parte inferior" />
 
                 <com.google.android.material.tabs.TabItem
+                    android:id="@+id/tabSneakers"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/guardados" />
-
-                <com.google.android.material.tabs.TabItem
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/me_gusta" />
+                    android:text="Zapatillas" />
             </com.google.android.material.tabs.TabLayout>
 
-            <!-- Contenedor de Prendas (RecyclerView para lista dinámica) -->
+            <!-- Contenedor de Prendas (RecyclerView) -->
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/outfitsRecyclerView"
                 android:layout_width="0dp"
@@ -241,11 +237,10 @@
                 android:layout_marginBottom="32dp"
                 app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
                 app:spanCount="2"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tabLayout"
-                tools:listitem="@layout/item_outfit_outlined" /> <!-- Corregido a item_outfit_outlined -->
+                tools:listitem="@layout/item_outfit_outlined" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>
