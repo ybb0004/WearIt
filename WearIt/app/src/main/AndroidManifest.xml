@@ -17,9 +17,7 @@
         <activity
             android:name=".activity_w020000_home_app"
             android:exported="false" />
-        <activity
-            android:name=".MainActivity"
-            android:exported="false" />
+
         <activity
             android:name=".W01_0000_Activity_Inicio_App"
             android:exported="true">

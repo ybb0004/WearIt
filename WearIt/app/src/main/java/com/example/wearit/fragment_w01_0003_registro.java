@@ -202,7 +202,7 @@ public class fragment_w01_0003_registro extends Fragment {
         } catch (IllegalArgumentException e) {
             Log.e("NavigationError", "Error en navegación: " + e.getMessage());
             // Fallback: iniciar nueva actividad
-            startActivity(new Intent(getActivity(), MainActivity.class));
+            startActivity(new Intent(getActivity(), activity_w020000_home_app.class));
             if (getActivity() != null) {
                 getActivity().finish();
             }

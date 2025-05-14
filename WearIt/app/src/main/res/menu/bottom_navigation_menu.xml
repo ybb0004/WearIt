@@ -5,22 +5,12 @@
         android:icon="@drawable/ic_home_24px"
         android:title=""/>
     <item
-        android:id="@+id/item_2"
-        android:enabled="true"
-        android:icon="@drawable/search_24px"
-        android:title=""/>
-    <item
         android:id="@+id/item_3"
         android:checkable="false"
         android:enabled="true"
         android:icon="@drawable/screenshot_frame_2_24px"
         android:iconTint="#E13131"
         android:title="" />
-    <item
-        android:id="@+id/item_4"
-        android:enabled="true"
-        android:icon="@drawable/ic_calendar_month_24px"
-        android:title=""/>
     <item
         android:id="@+id/item_5"
         android:enabled="true"
