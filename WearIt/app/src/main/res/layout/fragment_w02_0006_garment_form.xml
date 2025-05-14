@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/gradient_background"
     tools:context=".fragment_w02_0006_garment_form">
 
     <!-- Botón Atrás (Fijo con Elevación Alta) -->
@@ -85,8 +84,8 @@
                     android:background="@drawable/rounded_white_background"
                     android:dropDownHeight="200dp"
                     android:inputType="text"
-                    android:padding="16dp"
-                    android:minHeight="56dp" />
+                    android:minHeight="56dp"
+                    android:padding="16dp" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <!-- Campo: Marca (AutoCompleteTextView) -->
@@ -114,8 +113,8 @@
                     android:background="@drawable/rounded_white_background"
                     android:dropDownHeight="200dp"
                     android:inputType="text"
-                    android:padding="16dp"
-                    android:minHeight="56dp" />
+                    android:minHeight="56dp"
+                    android:padding="16dp" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <!-- Campo: Temporada (AutoCompleteTextView) -->
@@ -143,8 +142,8 @@
                     android:background="@drawable/rounded_white_background"
                     android:dropDownHeight="200dp"
                     android:inputType="text"
-                    android:padding="16dp"
-                    android:minHeight="56dp" />
+                    android:minHeight="56dp"
+                    android:padding="16dp" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <!-- Campo: Color (AutoCompleteTextView con Previsualización) -->
@@ -172,8 +171,8 @@
                     android:background="@drawable/rounded_white_background"
                     android:dropDownHeight="200dp"
                     android:inputType="text"
-                    android:padding="16dp"
-                    android:minHeight="56dp" />
+                    android:minHeight="56dp"
+                    android:padding="16dp" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <!-- Círculo de Previsualización del Color -->
@@ -213,8 +212,8 @@
                     android:background="@drawable/rounded_white_background"
                     android:dropDownHeight="200dp"
                     android:inputType="text"
-                    android:padding="16dp"
-                    android:minHeight="56dp" />
+                    android:minHeight="56dp"
+                    android:padding="16dp" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <!-- Campo: Estilo (AutoCompleteTextView) -->
@@ -242,8 +241,8 @@
                     android:background="@drawable/rounded_white_background"
                     android:dropDownHeight="200dp"
                     android:inputType="text"
-                    android:padding="16dp"
-                    android:minHeight="56dp" />
+                    android:minHeight="56dp"
+                    android:padding="16dp" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <!-- Botón Guardar -->
