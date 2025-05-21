@@ -1,5 +1,6 @@
 package com.example.wearit;
 
+import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -14,6 +15,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
@@ -21,6 +24,8 @@ import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -29,12 +34,20 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 import java.util.Random;
+import android.Manifest;
+
 
 public class fragment_w02_0001_home extends Fragment {
 
@@ -43,6 +56,9 @@ public class fragment_w02_0001_home extends Fragment {
     private Runnable updateTimeRunnable;
     private TextView timeText;
     private ImageView dayNightIcon;
+    private ImageView weatherIcon;
+    private TextView temperature;
+
 
     private ImageView tshirtImage, pantsImage, shoesImage;
     private Button generateOutfitButton;
@@ -54,6 +70,10 @@ public class fragment_w02_0001_home extends Fragment {
     private List<Prenda> superiorList = new ArrayList<>();
     private List<Prenda> inferiorList = new ArrayList<>();
     private List<Prenda> zapatillaList = new ArrayList<>();
+
+    private static final int LOCATION_PERMISSION_REQUEST_CODE = 100;
+    private FusedLocationProviderClient fusedLocationClient;
+
 
     // Clase auxiliar para representar una prenda
     public static class Prenda {
@@ -77,11 +97,14 @@ public class fragment_w02_0001_home extends Fragment {
         View view = inflater.inflate(R.layout.fragment_w02_0001_home, container, false);
 
         dayNightIcon = view.findViewById(R.id.dayNightIcon);
+        weatherIcon = view.findViewById(R.id.weatherIcon);
         timeText = view.findViewById(R.id.timeText);
         tshirtImage = view.findViewById(R.id.imageView2);
         pantsImage = view.findViewById(R.id.imageView3);
         shoesImage = view.findViewById(R.id.imageView4);
         generateOutfitButton = view.findViewById(R.id.iconButton);
+
+        temperature = view.findViewById(R.id.temperatureText);
 
         updateTimeAndDayNight();
 
@@ -90,8 +113,30 @@ public class fragment_w02_0001_home extends Fragment {
 
         generateOutfitButton.setOnClickListener(v -> generateRandomOutfit());
 
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity());
+
+        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_REQUEST_CODE);
+        } else {
+            getLocationAndWeather();
+        }
+
+
         return view;
     }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                getLocationAndWeather();
+            } else {
+                Toast.makeText(requireContext(), "Permiso de ubicación denegado", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
 
     private void initializeFirebase() {
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -258,5 +303,92 @@ public class fragment_w02_0001_home extends Fragment {
         Toast.makeText(getContext(), "Outfit patrocinado por ZARA y MORRISON", Toast.LENGTH_SHORT).show();
     }
 
+    private void getLocationAndWeather() {
+        if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // El permiso no está concedido, muestra un mensaje o vuelve a pedirlo si quieres
+            Toast.makeText(requireContext(), "Permiso de ubicación no concedido", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        fusedLocationClient.getLastLocation()
+                .addOnSuccessListener(location -> {
+                    if (location != null) {
+                        double latitude = location.getLatitude();
+                        double longitude = location.getLongitude();
+                        getWeatherData(latitude, longitude);
+                    } else {
+                        Toast.makeText(requireContext(), "No se pudo obtener la ubicación", Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+
+    private void getWeatherData(double lat, double lon) {
+        new Thread(() -> {
+            try {
+                String apiKey = "fe60f6302f6d1a8c64eb33af427f2bc5";
+                String urlString = "https://api.openweathermap.org/data/2.5/weather?lat=" + lat + "&lon=" + lon + "&appid=" + apiKey + "&units=metric";
+
+                URL url = new URL(urlString);
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn.setRequestMethod("GET");
+
+                BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                StringBuilder response = new StringBuilder();
+                String line;
+
+                while ((line = in.readLine()) != null) {
+                    response.append(line);
+                }
+                in.close();
+
+                JSONObject jsonObject = new JSONObject(response.toString());
+                double temp = jsonObject.getJSONObject("main").getDouble("temp");
+
+                // Obtener la descripción del clima
+                String weatherMain = jsonObject.getJSONArray("weather")
+                        .getJSONObject(0)
+                        .getString("main"); // Ej: "Rain", "Clear", "Clouds"
+
+                requireActivity().runOnUiThread(() -> {
+                    temperature.setText(temp + "°C");
+
+                    // Cambiar icono según el clima
+                    switch (weatherMain) {
+                        case "Rain":
+                            weatherIcon.setImageResource(R.drawable.ic_rain);
+                            break;
+                        case "Clouds":
+                            weatherIcon.setImageResource(R.drawable.cloud_24px);
+                            break;
+                        case "Clear":
+                            weatherIcon.setImageResource(R.drawable.wb_sunny_24px);
+                            break;
+                        case "Snow":
+                            weatherIcon.setImageResource(R.drawable.ic_snow);
+                            break;
+                        case "Thunderstorm":
+                            weatherIcon.setImageResource(R.drawable.ic_thunder);
+                            break;
+                        default:
+                            //weatherIcon.setImageResource(R.drawable.ic_placeholder);
+                            break;
+                    }
+                });
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }).start();
+    }
+
+
+
+
+
+
+//fe60f6302f6d1a8c64eb33af427f2bc5
+
+    //weatherIcon  -  temperatureText
 
 }

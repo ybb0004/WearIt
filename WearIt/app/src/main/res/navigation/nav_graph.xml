@@ -18,12 +18,22 @@
         <action
             android:id="@+id/action_fragment_w02_0001_home_to_fragment_w02_0006_garment_form"
             app:destination="@id/fragment_w02_0006_garment_form" />
+        <action
+            android:id="@+id/action_fragment_w02_0001_home_to_fragment_w02_0005_perfil"
+            app:destination="@id/fragment_w02_0005_perfil" />
     </fragment>
     <fragment
         android:id="@+id/fragment_w02_0005_perfil"
         android:name="com.example.wearit.fragment_w02_0005_perfil"
         android:label="fragment_w02_0005_perfil"
-        tools:layout="@layout/fragment_w02_0005_perfil" />
+        tools:layout="@layout/fragment_w02_0005_perfil" >
+        <action
+            android:id="@+id/action_fragment_w02_0005_perfil_to_fragment_w02_0001_home"
+            app:destination="@id/fragment_w02_0001_home" />
+        <action
+            android:id="@+id/action_fragment_w02_0005_perfil_to_fragment_w02_0006_garment_form"
+            app:destination="@id/fragment_w02_0006_garment_form" />
+    </fragment>
     <fragment
         android:id="@+id/abrirCamara"
         android:name="com.example.wearit.AbrirCamara"
@@ -41,5 +51,23 @@
         <action
             android:id="@+id/action_fragment_w02_0006_garment_form_to_fragment_w02_0001_home"
             app:destination="@id/fragment_w02_0001_home" />
-    </fragment>
-</navigation>
+    </fragment><!-- Acción global para ir al Home -->
+    <action
+        android:id="@+id/action_global_home"
+        app:destination="@id/fragment_w02_0001_home"
+        app:popUpTo="@id/fragment_w02_0001_home"
+        app:popUpToInclusive="true"/>
+
+    <!-- Acción global para ir al formulario de prendas -->
+    <action
+        android:id="@+id/action_global_garment_form"
+        app:destination="@id/fragment_w02_0006_garment_form"/>
+
+    <!-- Acción global para ir al perfil (ESTA ES LA QUE PREGUNTAS) -->
+    <action
+        android:id="@+id/action_global_perfil"
+        app:destination="@id/fragment_w02_0005_perfil"
+        app:popUpTo="@id/fragment_w02_0001_home"
+        app:popUpToInclusive="false"/>
+
+</navigation> <!-- Cierre del navigation -->

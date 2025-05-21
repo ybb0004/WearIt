@@ -77,6 +77,9 @@ dependencies {
     // para el garment
     implementation ("com.github.dhaval2404:colorpicker:2.3")
     implementation ("com.github.dhaval2404:colorpicker:2.0.0")
+    //wheather
+    implementation ("com.google.android.gms:play-services-location:21.0.1")
+    implementation ("com.google.android.gms:play-services-maps:18.2.0")
 
     //implementation ("com.dhaval2404.colorpicker:colorpicker:2.0.4")
 

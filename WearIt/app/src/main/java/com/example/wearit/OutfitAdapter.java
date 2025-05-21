@@ -39,7 +39,7 @@ public class OutfitAdapter extends RecyclerView.Adapter<OutfitAdapter.OutfitView
         Outfit outfit = outfitList.get(position);
         // Configura la imagen y el título en las vistas del ViewHolder
         holder.outfitImage.setImageResource(outfit.getImageResId());
-        holder.outfitTitle.setText(outfit.getTitle());
+       //holder.outfitTitle.setText(outfit.getTitle());
 
         // Configura un listener para el clic en el MaterialCardView
         holder.card.setOnClickListener(new View.OnClickListener() {
