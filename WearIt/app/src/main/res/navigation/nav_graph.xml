@@ -33,6 +33,9 @@
         <action
             android:id="@+id/action_fragment_w02_0005_perfil_to_fragment_w02_0006_garment_form"
             app:destination="@id/fragment_w02_0006_garment_form" />
+        <action
+            android:id="@+id/action_fragment_w02_0005_perfil_to_fragment_w02_0007_edit_profile"
+            app:destination="@id/fragment_w02_0007_edit_profile" />
     </fragment>
     <fragment
         android:id="@+id/abrirCamara"
@@ -69,5 +72,14 @@
         app:destination="@id/fragment_w02_0005_perfil"
         app:popUpTo="@id/fragment_w02_0001_home"
         app:popUpToInclusive="false"/>
+    <fragment
+        android:id="@+id/fragment_w02_0007_edit_profile"
+        android:name="com.example.wearit.fragment_w02_0007_edit_profile"
+        android:label="fragment_w02_0007_edit_profile"
+        tools:layout="@layout/fragment_w02_0007_edit_profile" >
+        <action
+            android:id="@+id/action_fragment_w02_0007_edit_profile_to_fragment_w02_0005_perfil"
+            app:destination="@id/fragment_w02_0005_perfil" />
+    </fragment>
 
 </navigation> <!-- Cierre del navigation -->

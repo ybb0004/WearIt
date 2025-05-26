@@ -5,7 +5,6 @@
     android:id="@+id/profileRoot"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/gradient_background"
     tools:context=".fragment_w02_0005_perfil">
 
     <!-- Header: Logo + Nombre WearIt -->
@@ -13,28 +12,28 @@
         android:id="@+id/headerLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
+        android:orientation="horizontal"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/appLogo"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:src="@drawable/wearit_logo_v2"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             android:contentDescription="@string/app_name"
+            android:src="@drawable/wearit_logo_v2"
             app:shapeAppearanceOverlay="@style/CircleImageView" />
 
         <TextView
             android:id="@+id/appName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/app_name"
-            android:textAppearance="?attr/textAppearanceHeadlineSmall"
             android:layout_gravity="center_vertical"
             android:layout_marginStart="8dp"
+            android:text="@string/app_name"
+            android:textAppearance="?attr/textAppearanceHeadlineSmall"
             android:textColor="@color/black" />
     </LinearLayout>
 
@@ -61,15 +60,14 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:fillViewport="true"
-        app:layout_constraintTop_toBottomOf="@id/headerLayout"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/headerLayout">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingBottom="32dp">
+            android:layout_height="wrap_content">
 
             <!-- Sección de Avatar y Nombre completo -->
             <androidx.cardview.widget.CardView
@@ -80,8 +78,8 @@
                 android:layout_marginTop="24dp"
                 app:cardCornerRadius="16dp"
                 app:cardElevation="8dp"
-                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
                 <LinearLayout
@@ -119,18 +117,18 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"
                 android:layout_marginTop="16dp"
-                android:orientation="horizontal"
                 android:gravity="center"
-                app:layout_constraintStart_toStartOf="parent"
+                android:orientation="horizontal"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/profileCard">
 
                 <!-- Prendas Escaneadas -->
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:layout_marginEnd="8dp"
+                    android:layout_weight="1"
                     app:cardCornerRadius="12dp"
                     app:cardElevation="4dp">
 
@@ -162,8 +160,8 @@
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:layout_marginStart="8dp"
+                    android:layout_weight="1"
                     app:cardCornerRadius="12dp"
                     app:cardElevation="4dp">
 
@@ -195,18 +193,18 @@
             <!-- Navegación Tabs: Parte superior, Parte inferior, Zapatillas -->
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/tabLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp"
-                android:layout_marginTop="24dp"
-                app:layout_constraintStart_toStartOf="parent"
+                android:layout_width="0dp"
+                android:layout_height="51dp"
+                android:layout_marginTop="20dp"
+                android:background="@color/transparent"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/statsContainer"
                 app:tabIndicatorColor="@color/color_naranja_oscuro"
                 app:tabIndicatorHeight="4dp"
                 app:tabMode="fixed"
                 app:tabSelectedTextColor="@color/color_naranja_oscuro"
-                app:tabTextColor="@color/gris_50">
+                app:tabTextColor="@color/white">
 
                 <com.google.android.material.tabs.TabItem
                     android:id="@+id/tabUpper"
@@ -236,10 +234,10 @@
                 android:layout_marginTop="24dp"
                 android:layout_marginBottom="32dp"
                 app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-                app:spanCount="2"
-                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tabLayout"
+                app:spanCount="2"
                 tools:listitem="@layout/item_outfit_outlined" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>

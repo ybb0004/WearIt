@@ -7,10 +7,14 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.textfield.TextInputEditText;
@@ -22,6 +26,8 @@ public class fragment_w02_0007_edit_profile extends Fragment {
     private TextInputEditText nameEdit;
     private Uri selectedImageUri;
 
+    private Button botonAtras;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -32,6 +38,14 @@ public class fragment_w02_0007_edit_profile extends Fragment {
         avatarView  = view.findViewById(R.id.editProfileAvatar);
         nameEdit    = view.findViewById(R.id.editProfileName);
         MaterialButton saveButton = view.findViewById(R.id.saveProfileButton);
+        botonAtras = view.findViewById(R.id.backButton);
+
+
+        botonAtras.setOnClickListener(v2 -> {
+            NavController navController = Navigation.findNavController(v2);
+            navController.navigate(R.id.action_fragment_w02_0007_edit_profile_to_fragment_w02_0005_perfil);
+
+        });
 
         // al pulsar avatar, abrir galería
         avatarView.setOnClickListener(v -> {
@@ -54,6 +68,8 @@ public class fragment_w02_0007_edit_profile extends Fragment {
         // TODO: cargar datos actuales en avatarView y nameEdit
 
         return view;
+
+
     }
 
     @Override
