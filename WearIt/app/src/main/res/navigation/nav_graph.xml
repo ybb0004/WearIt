@@ -80,6 +80,14 @@
         <action
             android:id="@+id/action_fragment_w02_0007_edit_profile_to_fragment_w02_0005_perfil"
             app:destination="@id/fragment_w02_0005_perfil" />
+        <action
+            android:id="@+id/action_fragment_w02_0007_edit_profile_to_fragment_w01_0002_iniciarsesion2"
+            app:destination="@id/fragment_w01_0002_iniciarsesion2" />
     </fragment>
+    <fragment
+        android:id="@+id/fragment_w01_0002_iniciarsesion2"
+        android:name="com.example.wearit.fragment_w01_0002_iniciarsesion"
+        android:label="fragment_w01_0002_iniciarsesion"
+        tools:layout="@layout/fragment_w01_0002_iniciarsesion" />
 
 </navigation> <!-- Cierre del navigation -->

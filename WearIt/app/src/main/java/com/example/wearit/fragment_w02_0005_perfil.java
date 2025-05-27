@@ -173,15 +173,13 @@ public class fragment_w02_0005_perfil extends Fragment {
                 else if (sel == 2) showCategory(Outfit.CATEGORY_ZAPATILLA);
                 else               showCategory(Outfit.CATEGORY_SUPERIOR);
 
-                Toast.makeText(getContext(),
-                        "Total de prendas: " + allOutfits.size(),
-                        Toast.LENGTH_SHORT).show();
+
             }
 
             @Override public void onCancelled(@NonNull DatabaseError error) {
-                Log.e(TAG, "Error al cargar prendas", error.toException());
+                Log.e(TAG, "Error al cargar prendas");
                 Toast.makeText(getContext(),
-                        "Error al cargar prendas: " + error.getMessage(),
+                        "Error al cargar prendas: " ,
                         Toast.LENGTH_SHORT).show();
             }
         });

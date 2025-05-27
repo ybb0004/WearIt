@@ -58,6 +58,8 @@ public class fragment_w02_0001_home extends Fragment {
     private ImageView dayNightIcon;
     private ImageView weatherIcon;
     private TextView temperature;
+    private boolean isFirstLoad = true;
+
 
 
     private ImageView tshirtImage, pantsImage, shoesImage;
@@ -132,7 +134,7 @@ public class fragment_w02_0001_home extends Fragment {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 getLocationAndWeather();
             } else {
-                Toast.makeText(requireContext(), "Permiso de ubicación denegado", Toast.LENGTH_SHORT).show();
+                Toast.makeText(requireContext(), "Permiso de ubicación denegado, actívelo para que funcione correctamente", Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -183,8 +185,12 @@ public class fragment_w02_0001_home extends Fragment {
                 if (!superiorList.isEmpty() && !inferiorList.isEmpty() && !zapatillaList.isEmpty()) {
                     generateRandomOutfit();
                 } else {
-                    Toast.makeText(getContext(), "No hay suficientes prendas para generar un outfit", Toast.LENGTH_SHORT).show();
+                    if (!isFirstLoad) {
+                        Toast.makeText(getContext(), "No hay suficientes prendas para generar un outfit", Toast.LENGTH_SHORT).show();
+                    }
                 }
+                // Ya pasó la primera carga, ponemos el flag en false
+                isFirstLoad = false;
                 mostrarOutfitPatrocinado(); // 👈 aquí se muestra al iniciar
             }
 
@@ -198,12 +204,24 @@ public class fragment_w02_0001_home extends Fragment {
     private void generateRandomOutfit() {
         if (getContext() == null) return;
 
-        if (superiorList.isEmpty() || inferiorList.isEmpty() || zapatillaList.isEmpty()) {
+        // Mostrar toast solo si faltan prendas y NO es la primera carga
+        if ((superiorList.isEmpty() || inferiorList.isEmpty() || zapatillaList.isEmpty()) && !isFirstLoad) {
             Toast.makeText(getContext(), "Faltan prendas, añade más para generar otro outfit", Toast.LENGTH_SHORT).show();
             return;
         }
 
+        // Aquí continúa el código para generar el outfit...
+
+
         Random random = new Random();
+
+        if (superiorList.isEmpty()) {
+            if (!isFirstLoad) {
+                Toast.makeText(getContext(), "No hay prendas superiores disponibles", Toast.LENGTH_SHORT).show();
+            }
+            return;
+        }
+
         Prenda top = superiorList.get(random.nextInt(superiorList.size()));
 
         List<Prenda> compatiblesInferior = new ArrayList<>();
@@ -221,7 +239,9 @@ public class fragment_w02_0001_home extends Fragment {
         }
 
         if (compatiblesInferior.isEmpty() || compatiblesZapatilla.isEmpty()) {
-            Toast.makeText(getContext(), "No hay combinación con las prendas superiores actualmente, ¡añade más para generar outfits! ", Toast.LENGTH_SHORT).show();
+            if (!isFirstLoad) {
+                Toast.makeText(getContext(), "No hay combinación con las prendas superiores actualmente, ¡añade más para generar outfits!", Toast.LENGTH_SHORT).show();
+            }
             return;
         }
 
@@ -232,7 +252,8 @@ public class fragment_w02_0001_home extends Fragment {
         loadImageWithGlide(bottom.imagenUrl, pantsImage, R.drawable.pantalon);
         loadImageWithGlide(shoe.imagenUrl, shoesImage, R.drawable.zapatilla);
 
-        //Toast.makeText(getContext(), "¡Outfit generado!", Toast.LENGTH_SHORT).show();
+// Toast.makeText(getContext(), "¡Outfit generado!", Toast.LENGTH_SHORT).show();
+
     }
 
     private void loadImageWithGlide(String imageUrl, ImageView imageView, int defaultImageResId) {
@@ -345,14 +366,18 @@ public class fragment_w02_0001_home extends Fragment {
                 JSONObject jsonObject = new JSONObject(response.toString());
                 double temp = jsonObject.getJSONObject("main").getDouble("temp");
 
+                int tempInt = (int) Math.round(temp);
+
+
+
                 // Obtener la descripción del clima
                 String weatherMain = jsonObject.getJSONArray("weather")
                         .getJSONObject(0)
                         .getString("main"); // Ej: "Rain", "Clear", "Clouds"
 
                 requireActivity().runOnUiThread(() -> {
-                    temperature.setText(temp + "°C");
-
+                   // temperature.setText(temp + "°C");
+                    temperature.setText(tempInt + "°C"); //sin decimaless
                     // Cambiar icono según el clima
                     switch (weatherMain) {
                         case "Rain":

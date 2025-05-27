@@ -18,6 +18,9 @@ import androidx.navigation.Navigation;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.auth.FirebaseAuth;
+
+
 
 public class fragment_w02_0007_edit_profile extends Fragment {
 
@@ -27,6 +30,7 @@ public class fragment_w02_0007_edit_profile extends Fragment {
     private Uri selectedImageUri;
 
     private Button botonAtras;
+    private Button logoutButton1;
 
     @Nullable
     @Override
@@ -39,21 +43,25 @@ public class fragment_w02_0007_edit_profile extends Fragment {
         nameEdit    = view.findViewById(R.id.editProfileName);
         MaterialButton saveButton = view.findViewById(R.id.saveProfileButton);
         botonAtras = view.findViewById(R.id.backButton);
+        logoutButton1 = view.findViewById(R.id.logoutButton);
 
-
+        // Botón para regresar al perfil
         botonAtras.setOnClickListener(v2 -> {
             NavController navController = Navigation.findNavController(v2);
             navController.navigate(R.id.action_fragment_w02_0007_edit_profile_to_fragment_w02_0005_perfil);
-
         });
 
-        // al pulsar avatar, abrir galería
+        // Botón de logout
+        logoutButton1.setOnClickListener(v -> performLogout());
+
+        // Al pulsar avatar, abrir galería
         avatarView.setOnClickListener(v -> {
             Intent pick = new Intent(Intent.ACTION_PICK);
             pick.setType("image/*");
             startActivityForResult(pick, PICK_IMAGE_REQUEST);
         });
 
+        // Guardar cambios del perfil
         saveButton.setOnClickListener(v -> {
             String nuevoNombre = nameEdit.getText().toString().trim();
             if (nuevoNombre.isEmpty()) {
@@ -68,9 +76,12 @@ public class fragment_w02_0007_edit_profile extends Fragment {
         // TODO: cargar datos actuales en avatarView y nameEdit
 
         return view;
-
-
     }
+
+    /**
+     * Realiza el logout del usuario y navega a otra actividad
+     */
+
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -79,5 +90,37 @@ public class fragment_w02_0007_edit_profile extends Fragment {
             avatarView.setImageURI(selectedImageUri);
         }
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    /**
+     * Realiza el logout del usuario y navega a la pantalla de inicio
+     */
+    private void performLogout() {
+        try {
+            // Cerrar sesión en Firebase
+            FirebaseAuth.getInstance().signOut();
+
+
+            // Crear intent para ir a la pantalla de inicio/registro
+            Intent intent = new Intent(requireActivity(), W01_0000_Activity_Inicio_App.class);
+            startActivity(intent);
+
+            // Limpiar stack de actividades para evitar que el usuario regrese con el botón atrás
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
+                    Intent.FLAG_ACTIVITY_NEW_TASK |
+                    Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
+            // Iniciar la actividad de login
+            startActivity(intent);
+
+            // Finalizar la actividad actual
+            requireActivity().finish();
+
+        } catch (Exception e) {
+            // Manejar cualquier error durante el logout
+            Toast.makeText(getContext(),
+                    "Error al cerrar sesión: ",
+                    Toast.LENGTH_SHORT).show();
+        }
     }
 }
