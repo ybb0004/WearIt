@@ -7,6 +7,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.transition.TransitionManager;
+
+import com.bumptech.glide.Glide;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.transition.MaterialElevationScale;
@@ -38,7 +40,9 @@ public class OutfitAdapter extends RecyclerView.Adapter<OutfitAdapter.OutfitView
         // Obtiene la prenda en la posición actual
         Outfit outfit = outfitList.get(position);
         // Configura la imagen y el título en las vistas del ViewHolder
-        holder.outfitImage.setImageResource(outfit.getImageResId());
+        Glide.with(holder.itemView.getContext())
+                .load(outfit.getImageUrl())
+                .into(holder.outfitImage);
        //holder.outfitTitle.setText(outfit.getTitle());
 
         // Configura un listener para el clic en el MaterialCardView

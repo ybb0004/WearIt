@@ -140,8 +140,11 @@ public class fragment_w02_0005_perfil extends Fragment {
         clothesRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override public void onDataChange(@NonNull DataSnapshot snapshot) {
                 Log.d(TAG, "Prendas recibidas: " + snapshot.getChildrenCount());
+
                 for (DataSnapshot ds : snapshot.getChildren()) {
                     String imageUrl = ds.child("imagen_url").getValue(String.class);
+                    Log.d(TAG, "URL recibida: " + imageUrl);
+
                     String tipo     = ds.child("tipo").getValue(String.class);
                     if (imageUrl != null && tipo != null) {
                         // Usa el constructor existente: (int imageResId, String title, String category, String imageUrl)
