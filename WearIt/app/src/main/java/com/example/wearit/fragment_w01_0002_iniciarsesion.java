@@ -38,8 +38,7 @@ public class fragment_w01_0002_iniciarsesion extends Fragment {
         MaterialButton iconButton = view.findViewById(R.id.iconButton);
         ImageView logo = view.findViewById(R.id.imageView);
         MaterialButton buttonLogin = view.findViewById(R.id.button);
-        MaterialButton buttonGoogle = view.findViewById(R.id.buttonGoogle);
-        MaterialButton buttonFacebook = view.findViewById(R.id.buttonFacebook);
+
         TextInputEditText userField = view.findViewById(R.id.textInputEditTextUser);
         TextInputEditText passwordField = view.findViewById(R.id.textInputEditTextPassword);
 
@@ -109,23 +108,7 @@ public class fragment_w01_0002_iniciarsesion extends Fragment {
             }
         });
 
-        // Botón Google
-        buttonGoogle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                v.startAnimation(buttonScale);
-                // Aquí va la lógica de inicio de sesión con Google
-            }
-        });
 
-        // Botón Facebook
-        buttonFacebook.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                v.startAnimation(buttonScale);
-                // Aquí va la lógica de inicio de sesión con Facebook
-            }
-        });
 
         // Animación de enfoque para campos de texto
         View.OnFocusChangeListener focusListener = new View.OnFocusChangeListener() {
