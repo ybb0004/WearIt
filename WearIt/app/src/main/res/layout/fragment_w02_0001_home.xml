@@ -138,15 +138,15 @@
         style="?attr/materialIconButtonFilledStyle"
         android:layout_width="75dp"
         android:layout_height="75dp"
-        android:backgroundTint="@color/color_verde_claro"
+        android:backgroundTint="@color/green"
         android:gravity="center"
-        app:icon="@drawable/shuffle_24px"
+        app:icon="@drawable/directory_sync_24px"
         app:iconGravity="textTop"
         app:iconSize="50dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
-        app:layout_constraintVertical_bias="0.120000005" />
+        app:layout_constraintVertical_bias="0.25" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
