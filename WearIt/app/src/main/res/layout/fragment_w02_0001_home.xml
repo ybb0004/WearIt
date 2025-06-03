@@ -38,7 +38,7 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:contentDescription="@string/day_night_icon_desc"
-                android:src="@drawable/wb_sunny_24px" />
+                android:src="@drawable/reloj" />
 
             <TextView
                 android:id="@+id/timeText"

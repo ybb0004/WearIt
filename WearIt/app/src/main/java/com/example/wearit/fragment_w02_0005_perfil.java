@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -30,6 +31,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,9 +45,11 @@ public class fragment_w02_0005_perfil extends Fragment {
     private List<Outfit> allOutfits;
     private List<Outfit> outfitList;
     private TextView profileName, scannedCountView;
+    private ShapeableImageView profileAvatar;
     private MaterialButton settingsButton;
     private TabLayout tabLayout;
     private DatabaseReference clothesRef;
+    private String currentUserEmail;
 
     @Nullable @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -58,16 +62,23 @@ public class fragment_w02_0005_perfil extends Fragment {
         tabLayout           = view.findViewById(R.id.tabLayout);
         outfitsRecyclerView = view.findViewById(R.id.outfitsRecyclerView);
         profileName         = view.findViewById(R.id.profileName);
+        profileAvatar       = view.findViewById(R.id.profileAvatar);
         scannedCountView    = view.findViewById(R.id.scannedCount);
+
+        // Obtener email del usuario actual para las consultas
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (currentUser != null) {
+            currentUserEmail = currentUser.getEmail().replace(".", "_").replace("@", "_");
+        }
 
         // Animaciones
         Animation fadeIn = AnimationUtils.loadAnimation(getContext(), R.anim.fade_in);
-       view.findViewById(R.id.profileCard).startAnimation(fadeIn);
-       view.findViewById(R.id.statsContainer).startAnimation(fadeIn);
-       tabLayout.startAnimation(fadeIn);
-       outfitsRecyclerView.startAnimation(fadeIn);
+        view.findViewById(R.id.profileCard).startAnimation(fadeIn);
+        view.findViewById(R.id.statsContainer).startAnimation(fadeIn);
+        tabLayout.startAnimation(fadeIn);
+        outfitsRecyclerView.startAnimation(fadeIn);
 
-        // Carga nombre de usuario
+        // Carga nombre y avatar de usuario desde Firebase
         loadUserProfile();
 
         // Inicializa listas y adaptador ANTES de la carga
@@ -94,7 +105,6 @@ public class fragment_w02_0005_perfil extends Fragment {
         settingsButton.setOnClickListener(v -> {
             NavController navController = Navigation.findNavController(v);
             navController.navigate(R.id.action_fragment_w02_0005_perfil_to_fragment_w02_0007_edit_profile);
-
         });
 
         // Inicializa Firebase y descarga prendas
@@ -104,18 +114,68 @@ public class fragment_w02_0005_perfil extends Fragment {
         return view;
     }
 
-    /** Carga el nombre a mostrar del perfil */
+    /** Carga el nombre y avatar desde Firebase */
     private void loadUserProfile() {
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        String nombre = "Usuario";
-        if (user != null) {
-            if (user.getDisplayName() != null && !user.getDisplayName().isEmpty()) {
-                nombre = user.getDisplayName();
-            } else if (user.getEmail() != null) {
-                nombre = user.getEmail().split("@")[0];
-            }
+        if (currentUserEmail == null) {
+            // Fallback si no hay usuario
+            profileName.setText("Usuario");
+            return;
         }
-        profileName.setText(nombre);
+
+        DatabaseReference userRef = FirebaseDatabase.getInstance()
+                .getReference("usuarios")
+                .child(currentUserEmail);
+
+        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    // Cargar nombre
+                    String nombre = snapshot.child("nombre").getValue(String.class);
+                    if (nombre != null && !nombre.isEmpty()) {
+                        profileName.setText(nombre);
+                    } else {
+                        // Fallback al email si no hay nombre guardado
+                        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                        if (user != null && user.getEmail() != null) {
+                            profileName.setText(user.getEmail().split("@")[0]);
+                        } else {
+                            profileName.setText("Usuario");
+                        }
+                    }
+
+                    // Cargar imagen de perfil
+                    String avatarUrl = snapshot.child("avatarUrl").getValue(String.class);
+                    if (avatarUrl != null && !avatarUrl.isEmpty()) {
+                        Picasso.get()
+                                .load(avatarUrl)
+                                .placeholder(R.drawable.wearit_logo_v2) // Imagen por defecto
+                                .error(R.drawable.wearit_logo_v2) // Imagen si hay error
+                                .into(profileAvatar);
+                    }
+                } else {
+                    // Si no existe el usuario en Firebase, usar fallback
+                    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                    if (user != null && user.getEmail() != null) {
+                        profileName.setText(user.getEmail().split("@")[0]);
+                    } else {
+                        profileName.setText("Usuario");
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.e(TAG, "Error al cargar perfil de usuario: " + error.getMessage());
+                // Usar fallback en caso de error
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                if (user != null && user.getEmail() != null) {
+                    profileName.setText(user.getEmail().split("@")[0]);
+                } else {
+                    profileName.setText("Usuario");
+                }
+            }
+        });
     }
 
     /** Crea la referencia usando email (puntos -> guiones bajos) */
@@ -172,8 +232,6 @@ public class fragment_w02_0005_perfil extends Fragment {
                 if      (sel == 1) showCategory(Outfit.CATEGORY_INFERIOR);
                 else if (sel == 2) showCategory(Outfit.CATEGORY_ZAPATILLA);
                 else               showCategory(Outfit.CATEGORY_SUPERIOR);
-
-
             }
 
             @Override public void onCancelled(@NonNull DatabaseError error) {
