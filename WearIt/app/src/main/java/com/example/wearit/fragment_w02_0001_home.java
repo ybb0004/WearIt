@@ -59,6 +59,8 @@ public class fragment_w02_0001_home extends Fragment {
     private ImageView weatherIcon;
     private TextView temperature;
     private boolean isFirstLoad = true;
+    private double currentTemperature = 20.0; // Valor por defecto
+
 
 
 
@@ -143,8 +145,27 @@ public class fragment_w02_0001_home extends Fragment {
     private void initializeFirebase() {
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
         if (currentUser != null) {
-            String emailKey = "test@wearit_com"; // o usar currentUser.getEmail().replace(".", "_")
-            clothesRef = FirebaseDatabase.getInstance().getReference("usuarios").child(emailKey).child("prendas");
+            // Obtener el email del usuario actual y convertirlo a formato válido para Firebase
+            String userEmail = currentUser.getEmail();
+            if (userEmail != null) {
+                // Reemplazar caracteres no válidos para claves de Firebase
+                String emailKey = userEmail.replace(".", "_")
+                        .replace("@", "_at_")
+                        .replace("#", "_hash_")
+                        .replace("$", "_dollar_")
+                        .replace("[", "_lbracket_")
+                        .replace("]", "_rbracket_");
+
+                clothesRef = FirebaseDatabase.getInstance().getReference("usuarios").child(emailKey).child("prendas");
+
+                Log.d(TAG, "Firebase inicializado para usuario: " + userEmail + " (clave: " + emailKey + ")");
+            } else {
+                Log.e(TAG, "Email del usuario es nulo");
+                Toast.makeText(getContext(), "Error: No se pudo obtener el email del usuario", Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            Log.e(TAG, "Usuario no autenticado");
+            Toast.makeText(getContext(), "Error: Usuario no autenticado", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -210,9 +231,6 @@ public class fragment_w02_0001_home extends Fragment {
             return;
         }
 
-        // Aquí continúa el código para generar el outfit...
-
-
         Random random = new Random();
 
         if (superiorList.isEmpty()) {
@@ -222,8 +240,25 @@ public class fragment_w02_0001_home extends Fragment {
             return;
         }
 
-        Prenda top = superiorList.get(random.nextInt(superiorList.size()));
+        // Determinar la temporada según la temperatura actual
+        String temporadaActual = getSeasonByTemperature(currentTemperature);
 
+        // Filtrar prendas superiores por temporada
+        List<Prenda> superioresFiltradas = new ArrayList<>();
+        for (Prenda p : superiorList) {
+            if (p.temporada.equalsIgnoreCase(temporadaActual)) {
+                superioresFiltradas.add(p);
+            }
+        }
+
+        // Si no hay prendas de la temporada actual, usar todas
+        if (superioresFiltradas.isEmpty()) {
+            superioresFiltradas = superiorList;
+        }
+
+        Prenda top = superioresFiltradas.get(random.nextInt(superioresFiltradas.size()));
+
+        // Buscar prendas inferiores compatibles (mismo estilo Y misma temporada que la superior elegida)
         List<Prenda> compatiblesInferior = new ArrayList<>();
         for (Prenda p : inferiorList) {
             if (p.temporada.equalsIgnoreCase(top.temporada) && p.estilo.equalsIgnoreCase(top.estilo)) {
@@ -231,6 +266,7 @@ public class fragment_w02_0001_home extends Fragment {
             }
         }
 
+        // Buscar zapatillas compatibles (mismo estilo Y misma temporada que la superior elegida)
         List<Prenda> compatiblesZapatilla = new ArrayList<>();
         for (Prenda p : zapatillaList) {
             if (p.temporada.equalsIgnoreCase(top.temporada) && p.estilo.equalsIgnoreCase(top.estilo)) {
@@ -240,7 +276,9 @@ public class fragment_w02_0001_home extends Fragment {
 
         if (compatiblesInferior.isEmpty() || compatiblesZapatilla.isEmpty()) {
             if (!isFirstLoad) {
-                Toast.makeText(getContext(), "No hay combinación con las prendas superiores actualmente, ¡añade más para generar outfits!", Toast.LENGTH_SHORT).show();
+                String mensaje = "No hay combinación de prendas de " + temporadaActual +
+                        " disponibles (Temp: " + Math.round(currentTemperature) + "°C). ¡Añade más para generar outfits!";
+                Toast.makeText(getContext(), mensaje, Toast.LENGTH_LONG).show();
             }
             return;
         }
@@ -252,8 +290,10 @@ public class fragment_w02_0001_home extends Fragment {
         loadImageWithGlide(bottom.imagenUrl, pantsImage, R.drawable.pantalon);
         loadImageWithGlide(shoe.imagenUrl, shoesImage, R.drawable.zapatilla);
 
-// Toast.makeText(getContext(), "¡Outfit generado!", Toast.LENGTH_SHORT).show();
-
+        // Toast opcional para mostrar la temporada del outfit generado
+        /*if (!isFirstLoad) {
+            Toast.makeText(getContext(), "Outfit de " + temporadaActual + " generado! (" + Math.round(currentTemperature) + "°C)", Toast.LENGTH_SHORT).show();
+        }*/
     }
 
     private void loadImageWithGlide(String imageUrl, ImageView imageView, int defaultImageResId) {
@@ -344,6 +384,7 @@ public class fragment_w02_0001_home extends Fragment {
     }
 
 
+    // Modificar el método getWeatherData para guardar la temperatura
     private void getWeatherData(double lat, double lon) {
         new Thread(() -> {
             try {
@@ -366,18 +407,18 @@ public class fragment_w02_0001_home extends Fragment {
                 JSONObject jsonObject = new JSONObject(response.toString());
                 double temp = jsonObject.getJSONObject("main").getDouble("temp");
 
+                // Guardar la temperatura actual
+                currentTemperature = temp;
+
                 int tempInt = (int) Math.round(temp);
-
-
 
                 // Obtener la descripción del clima
                 String weatherMain = jsonObject.getJSONArray("weather")
                         .getJSONObject(0)
-                        .getString("main"); // Ej: "Rain", "Clear", "Clouds"
+                        .getString("main");
 
                 requireActivity().runOnUiThread(() -> {
-                   // temperature.setText(temp + "°C");
-                    temperature.setText(tempInt + "°C"); //sin decimaless
+                    temperature.setText(tempInt + "°C");
                     // Cambiar icono según el clima
                     switch (weatherMain) {
                         case "Rain":
@@ -396,7 +437,6 @@ public class fragment_w02_0001_home extends Fragment {
                             weatherIcon.setImageResource(R.drawable.ic_thunder);
                             break;
                         default:
-                            //weatherIcon.setImageResource(R.drawable.ic_placeholder);
                             break;
                     }
                 });
@@ -407,7 +447,14 @@ public class fragment_w02_0001_home extends Fragment {
         }).start();
     }
 
-
+    // Método auxiliar para determinar la temporada según la temperatura
+    private String getSeasonByTemperature(double temperature) {
+        if (temperature >= 20.0) {
+            return "verano";
+        } else {
+            return "invierno";
+        }
+    }
 
 
 
