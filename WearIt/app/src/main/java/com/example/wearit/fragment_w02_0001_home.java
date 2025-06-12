@@ -283,10 +283,7 @@ public class fragment_w02_0001_home extends Fragment {
         loadImageWithGlide(bottom.imagenUrl, pantsImage, R.drawable.pantalon);
         loadImageWithGlide(shoe.imagenUrl, shoesImage, R.drawable.zapatilla);
 
-        // Mostrar toast de éxito solo cuando no es la primera carga
-        if (!isFirstLoad) {
-            Toast.makeText(getContext(), "¡Outfit generado!", Toast.LENGTH_SHORT).show();
-        }
+    
     }
 
 

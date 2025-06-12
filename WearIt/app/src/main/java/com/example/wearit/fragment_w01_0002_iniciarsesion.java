@@ -91,7 +91,6 @@ public class fragment_w01_0002_iniciarsesion extends Fragment {
                                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                                 if (user != null) {
                                     // Navegar a la siguiente pantalla o realizar acciones adicionales
-                                    Toast.makeText(getContext(), "Inicio de sesión exitoso", Toast.LENGTH_SHORT).show();
 
                                     // Ejemplo: Navegar a otro fragmento
                                         //NavController navController = Navigation.findNavController(v);
