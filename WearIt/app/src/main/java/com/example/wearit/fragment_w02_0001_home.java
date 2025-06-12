@@ -210,9 +210,6 @@ public class fragment_w02_0001_home extends Fragment {
             return;
         }
 
-        // Aquí continúa el código para generar el outfit...
-
-
         Random random = new Random();
 
         if (superiorList.isEmpty()) {
@@ -224,23 +221,57 @@ public class fragment_w02_0001_home extends Fragment {
 
         Prenda top = superiorList.get(random.nextInt(superiorList.size()));
 
+        // OPCIÓN 1: Algoritmo más flexible con múltiples niveles de compatibilidad
         List<Prenda> compatiblesInferior = new ArrayList<>();
+        List<Prenda> compatiblesZapatilla = new ArrayList<>();
+
+        // Nivel 1: Buscar compatibilidad exacta (temporada + estilo)
         for (Prenda p : inferiorList) {
-            if (p.temporada.equalsIgnoreCase(top.temporada) && p.estilo.equalsIgnoreCase(top.estilo)) {
+            if (p.temporada != null && p.estilo != null &&
+                    p.temporada.trim().equalsIgnoreCase(top.temporada.trim()) &&
+                    p.estilo.trim().equalsIgnoreCase(top.estilo.trim())) {
                 compatiblesInferior.add(p);
             }
         }
 
-        List<Prenda> compatiblesZapatilla = new ArrayList<>();
         for (Prenda p : zapatillaList) {
-            if (p.temporada.equalsIgnoreCase(top.temporada) && p.estilo.equalsIgnoreCase(top.estilo)) {
+            if (p.temporada != null && p.estilo != null &&
+                    p.temporada.trim().equalsIgnoreCase(top.temporada.trim()) &&
+                    p.estilo.trim().equalsIgnoreCase(top.estilo.trim())) {
                 compatiblesZapatilla.add(p);
             }
         }
 
+        // Nivel 2: Si no hay exactas, buscar solo por temporada
+        if (compatiblesInferior.isEmpty()) {
+            for (Prenda p : inferiorList) {
+                if (p.temporada != null && p.temporada.trim().equalsIgnoreCase(top.temporada.trim())) {
+                    compatiblesInferior.add(p);
+                }
+            }
+        }
+
+        if (compatiblesZapatilla.isEmpty()) {
+            for (Prenda p : zapatillaList) {
+                if (p.temporada != null && p.temporada.trim().equalsIgnoreCase(top.temporada.trim())) {
+                    compatiblesZapatilla.add(p);
+                }
+            }
+        }
+
+        // Nivel 3: Si aún no hay compatibles, usar todas las prendas disponibles
+        if (compatiblesInferior.isEmpty()) {
+            compatiblesInferior.addAll(inferiorList);
+        }
+
+        if (compatiblesZapatilla.isEmpty()) {
+            compatiblesZapatilla.addAll(zapatillaList);
+        }
+
+        // Ahora debe haber prendas compatibles
         if (compatiblesInferior.isEmpty() || compatiblesZapatilla.isEmpty()) {
             if (!isFirstLoad) {
-                Toast.makeText(getContext(), "No hay combinación con las prendas superiores actualmente, ¡añade más para generar outfits!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Error interno al generar outfit", Toast.LENGTH_SHORT).show();
             }
             return;
         }
@@ -252,9 +283,12 @@ public class fragment_w02_0001_home extends Fragment {
         loadImageWithGlide(bottom.imagenUrl, pantsImage, R.drawable.pantalon);
         loadImageWithGlide(shoe.imagenUrl, shoesImage, R.drawable.zapatilla);
 
-// Toast.makeText(getContext(), "¡Outfit generado!", Toast.LENGTH_SHORT).show();
-
+        // Mostrar toast de éxito solo cuando no es la primera carga
+        if (!isFirstLoad) {
+            Toast.makeText(getContext(), "¡Outfit generado!", Toast.LENGTH_SHORT).show();
+        }
     }
+
 
     private void loadImageWithGlide(String imageUrl, ImageView imageView, int defaultImageResId) {
         if (getContext() == null) return;
