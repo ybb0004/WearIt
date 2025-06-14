@@ -24,8 +24,8 @@
 ## 🛠️ Tecnologías Utilizadas
 | Tecnología       | Descripción                            |
 |------------------|----------------------------------------|
-| **Front-end**    |                                        |
-| **Back-end**     |                                        |
+| **Front-end**    | AndroidStudio                          |
+| **Back-end**     | AndroidStudoo                          |
 | **Base de Datos**| Firebase                               |
 | **API**          | OpenWeather para información climática |
 
